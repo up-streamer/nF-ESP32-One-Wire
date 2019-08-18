@@ -4,4 +4,4 @@ nanoFramework ESP32 OneWire Sample. This is heavily based on the work of Vishnu 
 The original drivers can be found in:
 
 Original source code:https://github.com/sharmavishnu/nf-companion/tree/master/nf-companion-lib-drivers-sensors
-Also found in Nuget packages.
+Also found in Nuget packages..
