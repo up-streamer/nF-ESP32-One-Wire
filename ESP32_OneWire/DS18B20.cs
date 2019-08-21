@@ -47,6 +47,10 @@ namespace nanoFramework.Companion.Drivers.Sensors
         /// </summary>
         public static readonly byte MATCH_ROM = 0x55;
         /// <summary>
+        /// Command to address all devices on the bus simultaneously
+        /// </summary>
+        public static readonly byte SKIP_ROM = 0xCC;
+        /// <summary>
         /// Command to trigger a temperature conversion
         /// </summary>
         private readonly byte CONVERT_TEMPERATURE = 0x44;
@@ -163,7 +167,7 @@ namespace nanoFramework.Companion.Drivers.Sensors
             {
                 _oneWire.TouchReset();
                 //first address all devices
-                _oneWire.WriteByte(0xCC);//Skip ROM command
+                _oneWire.WriteByte(SKIP_ROM);//Skip ROM command
                 _oneWire.WriteByte(CONVERT_TEMPERATURE);//convert temperature
                 Thread.Sleep(1000);//Wait for conversion (in default 12-bit resolution mode)                                            
             }
