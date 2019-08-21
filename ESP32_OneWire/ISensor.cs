@@ -58,6 +58,14 @@ namespace nanoFramework.Companion
         /// <summary>
         /// Stop tracking changes
         /// </summary>
-        void EndTrackChanges();        
+        void EndTrackChanges();
+        /// <summary>
+        /// Read Configuration from sensor
+        /// </summary>
+        bool ConfigurationRead();
+        /// <summary>
+        /// Write Configuration to sensor
+        /// </summary>
+        bool ConfigurationWrite();
     }
 }

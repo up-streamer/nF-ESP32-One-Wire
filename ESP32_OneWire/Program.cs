@@ -49,6 +49,13 @@ namespace OneWire_v3
                  * the class with an address.
                  */
                 foreach (var addrByte in ds18b20.Address) devAddrStr += addrByte.ToString("X2");
+
+                ds18b20.PrepareToRead();
+                ds18b20.ConfigurationRead();
+                Console.WriteLine("Resolution = " + ds18b20.Resolution);
+                Console.WriteLine("Temperute Hi alarm =" + ds18b20.TempHiAlarm + " C");
+                Console.WriteLine("Temperute Lo alarm =" + ds18b20.TempLoAlarm + " C");
+
                 int loopRead = 20;
                 
                 while (loopRead > 0)

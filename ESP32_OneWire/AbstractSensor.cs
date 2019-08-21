@@ -179,7 +179,15 @@ namespace nanoFramework.Companion
         /// Reset sensor
         /// </summary>
         public abstract void Reset();
+        /// <summary>
+        /// Read Configuration from sensor
+        /// </summary>
+        public abstract bool ConfigurationRead();
+        /// <summary>
+        /// Write Configuration to sensor
+        /// </summary>
+        public abstract bool ConfigurationWrite();
         #endregion
-        
+
     }
 }

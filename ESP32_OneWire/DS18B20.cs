@@ -81,6 +81,8 @@ namespace nanoFramework.Companion.Drivers.Sensors
         /// R1=1,R0=1=>3 -> 12bit (default on power up) 
         /// </summary>
         public byte Resolution { get; set; }
+        public sbyte TempHiAlarm { get; set; }
+        public sbyte TempLoAlarm { get; set; }
         #endregion
 
         #region Constructor
@@ -185,11 +187,32 @@ namespace nanoFramework.Companion.Drivers.Sensors
                 //Now read the temperature
                 var tempLo = _oneWire.ReadByte();
                 var tempHi = _oneWire.ReadByte();
-                
+
+                #region Test Code
+                //var tempHalarm = _oneWire.ReadByte();
+                //var tempLalarm = _oneWire.ReadByte();
+                //var configReg = _oneWire.ReadByte();
+                //var byte5 = _oneWire.ReadByte();
+                //var byte6 = _oneWire.ReadByte();
+                //var byte7 = _oneWire.ReadByte();
+                //var CRC = _oneWire.ReadByte();
+                //Console.WriteLine("tempLo = " + tempLo.ToString());
+                //Console.WriteLine("tempHi = " + tempHi.ToString());
+                //Console.WriteLine("tempHi Alarm = " + tempHalarm.ToString());
+                //Console.WriteLine("tempL0 Alarm = " + tempLalarm.ToString());
+                //Console.WriteLine("Config Reg = " + configReg.ToString());
+                //Console.WriteLine("Byte 5 = " + byte5.ToString());
+                //Console.WriteLine("Byte 6 = " + byte6.ToString());
+                //Console.WriteLine("Byte 7 = " + byte7.ToString());
+                //Console.WriteLine("CRC = " + CRC.ToString());
+                #endregion
+
                 if (_oneWire.TouchReset())
-                {
-                    float currentTemperature = ((tempHi << 8) | tempLo) / 16;
-                    TemperatureInCelcius = (float)(/*Math.Floor*/(currentTemperature * Math.Pow(10, _scale)) / Math.Pow(10, _scale));
+                {     
+                    var currentTemperature = ((float) ((tempHi << 8) | tempLo)) / 16;
+                    TemperatureInCelcius = (float) ((Int32) Math.Floor(currentTemperature * Math.Pow(10, _scale)))/ Math.Pow(10, _scale);
+
+                    Console.WriteLine("current Temp no conversion = " + currentTemperature.ToString());
                 }
                 else
                     TemperatureInCelcius = ERROR_TEMPERATURE;
@@ -206,6 +229,54 @@ namespace nanoFramework.Companion.Drivers.Sensors
             TemperatureInCelcius = ERROR_TEMPERATURE;
         }
 
+        /// <summary>
+        /// Read sensor Configuration and
+        /// Write on Resolution, TempHiAlarm and TempLoAlarm properties.
+        /// Returns false if error during reading sensor.
+        /// Write 0xEE (238) to a property if
+        /// error during property handle.
+        /// </summary>
+        public override bool ConfigurationRead()
+        {
+            if (Address != null && Address.Length == 8 && Address[0] == FAMILY_CODE)
+            {
+                //now write command and ROM at once
+                byte[] cmdAndData = new byte[9] {
+                    0x55, //match ROM command
+                    Address[0],Address[1],Address[2],Address[3],Address[4],Address[5],Address[6],Address[7] //do not convert to a for..loop
+                };
+                _oneWire.TouchReset();
+                foreach (var b in cmdAndData) _oneWire.WriteByte(b);
+
+                //now read the scratchpad
+                var verify = _oneWire.WriteByte(READ_SCRATCHPAD);
+
+                //var tempLo = _oneWire.ReadByte();
+                //var tempHi = _oneWire.ReadByte();
+                _oneWire.ReadByte(); // Discard temperature bytes
+                _oneWire.ReadByte();
+                TempHiAlarm = (sbyte)_oneWire.ReadByte();
+                TempLoAlarm = (sbyte) _oneWire.ReadByte();
+                Byte configReg = _oneWire.ReadByte();
+
+                if (_oneWire.TouchReset())
+                {
+                    configReg = (Byte)(configReg >> 5);
+                    Resolution = configReg;
+                }
+                else {
+                    Resolution = 0xEE;
+                };
+
+            }
+            return Resolution != ERROR_TEMPERATURE;
+
+        }
+
+        public override bool ConfigurationWrite()
+        {
+            return false;
+        }
         #endregion
 
         #region Change tracking
