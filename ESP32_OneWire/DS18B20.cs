@@ -43,6 +43,10 @@ namespace nanoFramework.Companion.Drivers.Sensors
         /// </summary>
         public static readonly byte FAMILY_CODE = 0x28;
         /// <summary>
+        /// Command to address specific device on network
+        /// </summary>
+        public static readonly byte MATCH_ROM = 0x55;
+        /// <summary>
         /// Command to trigger a temperature conversion
         /// </summary>
         private readonly byte CONVERT_TEMPERATURE = 0x44;
@@ -174,7 +178,7 @@ namespace nanoFramework.Companion.Drivers.Sensors
             {
                 //now write command and ROM at once
                 byte[] cmdAndData = new byte[9] {
-                    0x55, //match ROM command
+                    MATCH_ROM, //Address specific device command
                     Address[0],Address[1],Address[2],Address[3],Address[4],Address[5],Address[6],Address[7] //do not convert to a for..loop
                 };
 
@@ -187,7 +191,7 @@ namespace nanoFramework.Companion.Drivers.Sensors
                 //Now read the temperature
                 var tempLo = _oneWire.ReadByte();
                 var tempHi = _oneWire.ReadByte();
-
+           
                 #region Test Code
                 //var tempHalarm = _oneWire.ReadByte();
                 //var tempLalarm = _oneWire.ReadByte();
@@ -242,7 +246,7 @@ namespace nanoFramework.Companion.Drivers.Sensors
             {
                 //now write command and ROM at once
                 byte[] cmdAndData = new byte[9] {
-                    0x55, //match ROM command
+                    MATCH_ROM, //Address specific device command
                     Address[0],Address[1],Address[2],Address[3],Address[4],Address[5],Address[6],Address[7] //do not convert to a for..loop
                 };
                 _oneWire.TouchReset();
@@ -255,7 +259,7 @@ namespace nanoFramework.Companion.Drivers.Sensors
                 //var tempHi = _oneWire.ReadByte();
                 _oneWire.ReadByte(); // Discard temperature bytes
                 _oneWire.ReadByte();
-                TempHiAlarm = (sbyte)_oneWire.ReadByte();
+                TempHiAlarm = (sbyte) _oneWire.ReadByte();
                 TempLoAlarm = (sbyte) _oneWire.ReadByte();
                 Byte configReg = _oneWire.ReadByte();
 
