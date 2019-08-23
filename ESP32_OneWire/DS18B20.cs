@@ -82,15 +82,25 @@ namespace nanoFramework.Companion.Drivers.Sensors
         /// </summary>
         public float TemperatureInCelcius { get; private set; }
         /// <summary>
-        /// Sensor resolution
+        /// Accessor/Mutator for Sensor resolution
         /// R1=0,R0=0=>0 -> 9bit 
         /// R1=0,R0=1=>1 -> 10bit 
         /// R1=1,R0=0=>2 -> 11bit 
         /// R1=1,R0=1=>3 -> 12bit (default on power up) 
         /// </summary>
-        public byte Resolution { get; set; }
-        public sbyte TempHiAlarm { get; set; }
-        public sbyte TempLoAlarm { get; set; }
+        public int SetResolution { private get; set; }
+        public int Resolution { get; private set; }
+        /// <summary>
+        /// Accessor/Mutator for Alarm Hi register in celcius
+        /// </summary>
+        public sbyte SetTempHiAlarm { private get; set; }
+        public sbyte TempHiAlarm { get; private set; }
+        
+        /// <summary>
+        /// Accessor/Mutator for Alarm Lo register in celcius
+        /// </summary>
+        public sbyte SetTempLoAlarm { private get; set; }
+        public sbyte TempLoAlarm { get; private set; }
         #endregion
 
         #region Constructor
@@ -172,6 +182,7 @@ namespace nanoFramework.Companion.Drivers.Sensors
                 Thread.Sleep(1000);//Wait for conversion (in default 12-bit resolution mode)                                            
             }
         }
+
         /// <summary>
         /// Read sensor data
         /// </summary>
@@ -196,25 +207,6 @@ namespace nanoFramework.Companion.Drivers.Sensors
                 var tempLo = _oneWire.ReadByte();
                 var tempHi = _oneWire.ReadByte();
            
-                #region Test Code
-                //var tempHalarm = _oneWire.ReadByte();
-                //var tempLalarm = _oneWire.ReadByte();
-                //var configReg = _oneWire.ReadByte();
-                //var byte5 = _oneWire.ReadByte();
-                //var byte6 = _oneWire.ReadByte();
-                //var byte7 = _oneWire.ReadByte();
-                //var CRC = _oneWire.ReadByte();
-                //Console.WriteLine("tempLo = " + tempLo.ToString());
-                //Console.WriteLine("tempHi = " + tempHi.ToString());
-                //Console.WriteLine("tempHi Alarm = " + tempHalarm.ToString());
-                //Console.WriteLine("tempL0 Alarm = " + tempLalarm.ToString());
-                //Console.WriteLine("Config Reg = " + configReg.ToString());
-                //Console.WriteLine("Byte 5 = " + byte5.ToString());
-                //Console.WriteLine("Byte 6 = " + byte6.ToString());
-                //Console.WriteLine("Byte 7 = " + byte7.ToString());
-                //Console.WriteLine("CRC = " + CRC.ToString());
-                #endregion
-
                 if (_oneWire.TouchReset())
                 {     
                     var currentTemperature = ((float) ((tempHi << 8) | tempLo)) / 16;
@@ -259,18 +251,18 @@ namespace nanoFramework.Companion.Drivers.Sensors
                 //now read the scratchpad
                 var verify = _oneWire.WriteByte(READ_SCRATCHPAD);
 
-                //var tempLo = _oneWire.ReadByte();
-                //var tempHi = _oneWire.ReadByte();
                 _oneWire.ReadByte(); // Discard temperature bytes
                 _oneWire.ReadByte();
                 TempHiAlarm = (sbyte) _oneWire.ReadByte();
+                SetTempHiAlarm = TempHiAlarm;
                 TempLoAlarm = (sbyte) _oneWire.ReadByte();
-                Byte configReg = _oneWire.ReadByte();
+                SetTempLoAlarm = TempLoAlarm;
+                int configReg =  _oneWire.ReadByte();
 
                 if (_oneWire.TouchReset())
                 {
-                    configReg = (Byte)(configReg >> 5);
-                    Resolution = configReg;
+                    Resolution = (configReg >> 5);
+                    SetResolution = Resolution;
                 }
                 else {
                     Resolution = 0xEE;
@@ -280,10 +272,33 @@ namespace nanoFramework.Companion.Drivers.Sensors
             return Resolution != ERROR_TEMPERATURE;
 
         }
-
+        /// <summary>
+        /// Write sensor Configuration
+        /// From se SetTempHiAlarm,SetTempLoAlarm and
+        /// SetResolution.
+        /// The unchanged registers will be overwritten.
+        /// </summary>
         public override bool ConfigurationWrite()
         {
-            return false;
+            _oneWire.TouchReset();
+            //now write command and ROM at once
+            byte[] cmdAndData = new byte[9] {
+                    MATCH_ROM, //Address specific device command
+                    Address[0],Address[1],Address[2],Address[3],Address[4],Address[5],Address[6],Address[7] //do not convert to a for..loop
+                };
+            _oneWire.TouchReset();
+            foreach (var b in cmdAndData) _oneWire.WriteByte(b);
+
+            //now write the scratchpad
+            var verify = _oneWire.WriteByte(WRITE_SCRATCHPAD);
+
+            _oneWire.WriteByte((byte)SetTempHiAlarm);
+            _oneWire.WriteByte((byte)SetTempLoAlarm);
+            _oneWire.WriteByte((byte)(SetResolution << 5));
+
+            _oneWire.TouchReset();
+
+            return true;
         }
         #endregion
 
