@@ -95,7 +95,7 @@ namespace nanoFramework.Companion.Drivers.Sensors
         /// </summary>
         public sbyte SetTempHiAlarm { private get; set; }
         public sbyte TempHiAlarm { get; private set; }
-        
+
         /// <summary>
         /// Accessor/Mutator for Alarm Lo register in celcius
         /// </summary>
@@ -110,15 +110,16 @@ namespace nanoFramework.Companion.Drivers.Sensors
         /// <param name="owBus">Which one wire controller (logical bus) to use</param>
         /// <param name="deviceAddr">The device address (if null, then this device will search for one on the bus and latch on to the first one found)</param>
         /// <param name="scale">How many decimal places to look for in the temperature and humidity values</param>
-        public DS18B20(OneWireController owBus,byte[] deviceAddr = null,uint scale=2)
+        public DS18B20(OneWireController owBus, byte[] deviceAddr = null, uint scale = 2)
         {
             _oneWire = owBus;
-            if (deviceAddr != null) {
+            if (deviceAddr != null)
+            {
                 if (deviceAddr.Length != 8) throw new ArgumentException();//must be 8 bytes
                 if (deviceAddr[0] != FAMILY_CODE) throw new ArgumentException();//invalid family code
                 Address = deviceAddr;
             }
-            
+
             TemperatureInCelcius = ERROR_TEMPERATURE;
             Resolution = 3;
             _scale = scale;
@@ -162,7 +163,7 @@ namespace nanoFramework.Companion.Drivers.Sensors
                             Array.Copy(_oneWire.SerialNumber, Address, _oneWire.SerialNumber.Length);
                             found = true;
                             break;
-                        } 
+                        }
                     } while (_oneWire.FindNextDevice(true, false));//keep searching until we get one                    
                 }
             }
@@ -206,13 +207,20 @@ namespace nanoFramework.Companion.Drivers.Sensors
                 //Now read the temperature
                 var tempLo = _oneWire.ReadByte();
                 var tempHi = _oneWire.ReadByte();
-           
-                if (_oneWire.TouchReset())
-                {     
-                    var currentTemperature = ((float) ((tempHi << 8) | tempLo)) / 16;
-                    TemperatureInCelcius = (float) ((Int32) Math.Floor(currentTemperature * Math.Pow(10, _scale)))/ Math.Pow(10, _scale);
 
-                    Console.WriteLine("current Temp no conversion = " + currentTemperature.ToString());
+                if (_oneWire.TouchReset())
+                {
+                    var temp = ((tempHi << 8) | tempLo);
+
+                    // Bits manipulation to represent negative values correctly.
+                    if ((tempHi >> 7) == 1)
+                    {
+                        temp = (temp | unchecked((int)0xffff0000));
+                    }
+
+                    var currentTemperature = ((float)temp) / 16;
+
+                    TemperatureInCelcius = ((currentTemperature * Math.Pow(10, _scale))) / Math.Pow(10, _scale);
                 }
                 else
                     TemperatureInCelcius = ERROR_TEMPERATURE;
@@ -253,18 +261,19 @@ namespace nanoFramework.Companion.Drivers.Sensors
 
                 _oneWire.ReadByte(); // Discard temperature bytes
                 _oneWire.ReadByte();
-                TempHiAlarm = (sbyte) _oneWire.ReadByte();
+                TempHiAlarm = (sbyte)_oneWire.ReadByte();
                 SetTempHiAlarm = TempHiAlarm;
-                TempLoAlarm = (sbyte) _oneWire.ReadByte();
+                TempLoAlarm = (sbyte)_oneWire.ReadByte();
                 SetTempLoAlarm = TempLoAlarm;
-                int configReg =  _oneWire.ReadByte();
+                int configReg = _oneWire.ReadByte();
 
                 if (_oneWire.TouchReset())
                 {
                     Resolution = (configReg >> 5);
                     SetResolution = Resolution;
                 }
-                else {
+                else
+                {
                     Resolution = 0xEE;
                 };
 
@@ -323,7 +332,7 @@ namespace nanoFramework.Companion.Drivers.Sensors
             Read();
 
             float currentTemperature = (float)(Math.Floor(TemperatureInCelcius * Math.Pow(10, _scale)) / Math.Pow(10, _scale));
-            
+
             bool valuesChanged = (previousTemperature != currentTemperature);
 
             return valuesChanged;
