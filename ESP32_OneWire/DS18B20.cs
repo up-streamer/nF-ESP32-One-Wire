@@ -180,7 +180,24 @@ namespace nanoFramework.Companion.Drivers.Sensors
                 //first address all devices
                 _oneWire.WriteByte(SKIP_ROM);//Skip ROM command
                 _oneWire.WriteByte(CONVERT_TEMPERATURE);//convert temperature
-                Thread.Sleep(1000);//Wait for conversion (in default 12-bit resolution mode)                                            
+
+                int waitConversion;
+                switch (Resolution)
+                {
+                    case 0:
+                        waitConversion = 125;
+                        break;
+                    case 1:
+                        waitConversion = 250;
+                        break;
+                    case 2:
+                        waitConversion = 500;
+                        break;
+                    case 3:
+                        waitConversion = 1000;
+                        break;
+                }
+                Thread.Sleep(waitConversion); //Wait for conversion (in default 12-bit resolution mode)                                            
             }
         }
 
