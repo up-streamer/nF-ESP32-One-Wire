@@ -251,6 +251,44 @@
             </summary>
             <remarks>Applications can subscribe to this event to be notified when an interrupt event occurs.</remarks>
         </member>
+        <member name="T:nanoFramework.Runtime.Events.CustomEventArgs">
+            <summary>
+            Contains argument values for custom events.
+            </summary>
+        </member>
+        <member name="P:nanoFramework.Runtime.Events.CustomEventArgs.Data1">
+            <summary>
+            Value of 1st field in event.
+            </summary>
+        </member>
+        <member name="P:nanoFramework.Runtime.Events.CustomEventArgs.Data2">
+            <summary>
+            Value of 1st field in event.
+            </summary>
+        </member>
+        <member name="T:nanoFramework.Runtime.Events.CustomEventPostedEventHandler">
+            <summary>
+            Provides an event handler that is called when a custom event is posted.
+            </summary>
+            <param name="sender">Specifies the object that sent the custom event. </param>
+            <param name="e">Contains the custom event arguments. </param>
+        </member>
+        <member name="T:nanoFramework.Runtime.Events.CustomEvent">
+            <summary>
+            Provides handling for custom native events. 
+            </summary>
+        </member>
+        <member name="E:nanoFramework.Runtime.Events.CustomEvent.CustomEventPosted">
+            <summary>
+            Event occurs when a custom event is posted.
+            </summary>
+            <remarks>
+            The <see cref="T:nanoFramework.Runtime.Events.CustomEvent"/> class raises <see cref="E:nanoFramework.Runtime.Events.CustomEvent.CustomEventPosted"/> event when a custom event is posted. 
+            
+            To have a <see cref="T:nanoFramework.Runtime.Events.CustomEvent"/> object call an event-handling method when a <see cref="E:nanoFramework.Runtime.Events.CustomEvent.CustomEventPosted"/> event occurs, 
+            you must associate the method with a <see cref="T:nanoFramework.Runtime.Events.CustomEventPostedEventHandler"/> delegate, and add this delegate to this event. 
+            </remarks>
+        </member>
         <member name="T:nanoFramework.Runtime.Events.WeakDelegate">
             <summary>
             Provides methods for combining and removing "weak" delegates. 
