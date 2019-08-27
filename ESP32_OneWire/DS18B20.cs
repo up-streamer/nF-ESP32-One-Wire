@@ -28,12 +28,9 @@ namespace nanoFramework.Companion.Drivers.Sensors
     {
         #region Implementation
         /// <summary>
-        /// The underlying I2C device
+        /// The underlying One Wire device
         /// </summary>
         private OneWireController _oneWire = null;
-        /// <summary>
-        /// How many decimal places to account in temperature measurements
-        /// </summary>
         #endregion
 
         #region Constants
