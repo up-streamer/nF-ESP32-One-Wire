@@ -2,7 +2,6 @@
 using System.Threading;
 using nanoFramework.Companion.Drivers.Sensors;
 using nanoFramework.Devices.OneWire;
-using nanoFramework.Hardware.Esp32;
 
 
 namespace OneWire_v3
