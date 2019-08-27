@@ -34,7 +34,6 @@ namespace nanoFramework.Companion.Drivers.Sensors
         /// <summary>
         /// How many decimal places to account in temperature measurements
         /// </summary>
-        private uint _scale = 2;
         #endregion
 
         #region Constants
@@ -109,8 +108,8 @@ namespace nanoFramework.Companion.Drivers.Sensors
         /// </summary>
         /// <param name="owBus">Which one wire controller (logical bus) to use</param>
         /// <param name="deviceAddr">The device address (if null, then this device will search for one on the bus and latch on to the first one found)</param>
-        /// <param name="scale">How many decimal places to look for in the temperature and humidity values</param>
-        public DS18B20(OneWireController owBus, byte[] deviceAddr = null, uint scale = 2)
+        /// <param name="Resolution">Sensor resolution</param>
+        public DS18B20(OneWireController owBus, byte[] deviceAddr = null, int Resolution = 3)
         {
             _oneWire = owBus;
             if (deviceAddr != null)
@@ -121,8 +120,6 @@ namespace nanoFramework.Companion.Drivers.Sensors
             }
 
             TemperatureInCelcius = ERROR_TEMPERATURE;
-            Resolution = 3;
-            _scale = scale;
         }
         #endregion
 
@@ -232,9 +229,7 @@ namespace nanoFramework.Companion.Drivers.Sensors
                         temp = (temp | unchecked((int)0xffff0000));
                     }
 
-                    var currentTemperature = ((float)temp) / 16;
-
-                    TemperatureInCelcius = ((currentTemperature * Math.Pow(10, _scale))) / Math.Pow(10, _scale);
+                    TemperatureInCelcius = ((float)temp) / 16;
                 }
                 else
                     TemperatureInCelcius = ERROR_TEMPERATURE;
@@ -345,7 +340,7 @@ namespace nanoFramework.Companion.Drivers.Sensors
             PrepareToRead();
             Read();
 
-            float currentTemperature = (float)(Math.Floor(TemperatureInCelcius * Math.Pow(10, _scale)) / Math.Pow(10, _scale));
+            float currentTemperature = TemperatureInCelcius;
 
             bool valuesChanged = (previousTemperature != currentTemperature);
 

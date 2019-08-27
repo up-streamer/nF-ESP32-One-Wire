@@ -89,3 +89,6 @@ C:\Users\The_User\source\repos\nF-ESP32-One-Wire\ESP32_OneWire\obj\Debug\nanoFra
 C:\Users\The_User\source\repos\nF-ESP32-One-Wire\ESP32_OneWire\obj\Debug\System.Math.xml
 C:\Users\The_User\source\repos\nF-ESP32-One-Wire\ESP32_OneWire\obj\Debug\Windows.Devices.Gpio.pdb
 C:\Users\The_User\source\repos\nF-ESP32-One-Wire\ESP32_OneWire\obj\Debug\Windows.Devices.Gpio.xml
+C:\Users\The_User\source\repos\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\ESP32_OneWire.bin
+C:\Users\The_User\source\repos\nF-ESP32-One-Wire\ESP32_OneWire\obj\Debug\ESP32_OneWire.pe
+C:\Users\The_User\source\repos\nF-ESP32-One-Wire\ESP32_OneWire\obj\Debug\ESP32_OneWire.pdbx
