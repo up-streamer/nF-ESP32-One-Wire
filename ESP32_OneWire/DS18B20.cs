@@ -314,8 +314,8 @@ namespace nanoFramework.Companion.Drivers.Sensors
         }
         /// <summary>
         /// Write sensor Configuration
-        /// From se SetTempHiAlarm,SetTempLoAlarm and
-        /// SetResolution.
+        /// from tempHiAlarm, tempLoAlarm and
+        /// resolution.
         /// The unchanged registers will be overwritten.
         /// </summary>
         public override bool ConfigurationWrite()
