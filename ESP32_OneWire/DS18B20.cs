@@ -84,19 +84,46 @@ namespace nanoFramework.Companion.Drivers.Sensors
         /// R1=1,R0=0=>2 -> 11bit 
         /// R1=1,R0=1=>3 -> 12bit (default on power up) 
         /// </summary>
-        public int SetResolution { private get; set; }
-        public int Resolution { get; private set; }
+        private int resolution;
+        public int Resolution
+        {
+            get { return resolution; }
+            set
+            {
+                resolution = value < 0 ? 0 : value > 3 ? 3 : value;
+            }
+
+        }
         /// <summary>
         /// Accessor/Mutator for Alarm Hi register in celcius
+        /// Min -55, Max 150
         /// </summary>
-        public sbyte SetTempHiAlarm { private get; set; }
-        public sbyte TempHiAlarm { get; private set; }
-
+        private sbyte tempHiAlarm;
+        public sbyte TempHiAlarm
+        {
+            get { return tempHiAlarm; }
+            set
+            {
+                tempHiAlarm = value;
+                if (value < -55) { tempHiAlarm = -55; }
+                if (value > 125) { tempHiAlarm = 125; }
+            }
+        }
         /// <summary>
         /// Accessor/Mutator for Alarm Lo register in celcius
+        /// Min -55, Max 150
         /// </summary>
-        public sbyte SetTempLoAlarm { private get; set; }
-        public sbyte TempLoAlarm { get; private set; }
+        private sbyte tempLoAlarm;
+        public sbyte TempLoAlarm
+        {
+            get { return tempLoAlarm; }
+            set
+            {
+                tempLoAlarm = value;
+                if (value < -55) { tempLoAlarm = -55; }
+                if (value > 125) { tempLoAlarm = 125; }
+            }
+        }
         #endregion
 
         #region Constructor
@@ -117,6 +144,8 @@ namespace nanoFramework.Companion.Drivers.Sensors
             }
 
             TemperatureInCelcius = ERROR_TEMPERATURE;
+            TempHiAlarm = 30; // Set default alarm values
+            TempLoAlarm = 20;
         }
         #endregion
 
@@ -252,6 +281,7 @@ namespace nanoFramework.Companion.Drivers.Sensors
         /// </summary>
         public override bool ConfigurationRead()
         {
+           bool _restore = false;
             if (Address != null && Address.Length == 8 && Address[0] == FAMILY_CODE)
             {
                 //now write command and ROM at once
@@ -268,24 +298,19 @@ namespace nanoFramework.Companion.Drivers.Sensors
                 _oneWire.ReadByte(); // Discard temperature bytes
                 _oneWire.ReadByte();
                 TempHiAlarm = (sbyte)_oneWire.ReadByte();
-                SetTempHiAlarm = TempHiAlarm;
                 TempLoAlarm = (sbyte)_oneWire.ReadByte();
-                SetTempLoAlarm = TempLoAlarm;
                 int configReg = _oneWire.ReadByte();
 
                 if (_oneWire.TouchReset())
                 {
                     Resolution = (configReg >> 5);
-                    SetResolution = Resolution;
                 }
                 else
                 {
                     Resolution = 0xEE;
                 };
-
             }
             return Resolution != ERROR_TEMPERATURE;
-
         }
         /// <summary>
         /// Write sensor Configuration
@@ -307,9 +332,9 @@ namespace nanoFramework.Companion.Drivers.Sensors
             //now write the scratchpad
             var verify = _oneWire.WriteByte(WRITE_SCRATCHPAD);
 
-            _oneWire.WriteByte((byte)SetTempHiAlarm);
-            _oneWire.WriteByte((byte)SetTempLoAlarm);
-            _oneWire.WriteByte((byte)(SetResolution << 5));
+            _oneWire.WriteByte((byte)tempHiAlarm);
+            _oneWire.WriteByte((byte)tempLoAlarm);
+            _oneWire.WriteByte((byte)(resolution << 5));
 
             _oneWire.TouchReset();
 

@@ -55,9 +55,9 @@ namespace OneWire_v3
                 Console.WriteLine("Temperute Hi alarm =" + ds18b20.TempHiAlarm + " C");
                 Console.WriteLine("Temperute Lo alarm =" + ds18b20.TempLoAlarm + " C");
 
-                ds18b20.SetResolution = 0;
-                ds18b20.SetTempHiAlarm = -10;
-                ds18b20.SetTempLoAlarm = 10;
+                ds18b20.Resolution = -4;
+                ds18b20.TempHiAlarm = -10;
+                ds18b20.TempLoAlarm = 10;
                 ds18b20.ConfigurationWrite();
                 ds18b20.PrepareToRead();
                 ds18b20.ConfigurationRead();
