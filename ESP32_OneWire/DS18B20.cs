@@ -96,7 +96,7 @@ namespace nanoFramework.Companion.Drivers.Sensors
         }
         /// <summary>
         /// Accessor/Mutator for Alarm Hi register in celcius
-        /// Min -55, Max 150
+        /// Min -55, Max 125
         /// </summary>
         private sbyte tempHiAlarm;
         public sbyte TempHiAlarm
@@ -111,7 +111,7 @@ namespace nanoFramework.Companion.Drivers.Sensors
         }
         /// <summary>
         /// Accessor/Mutator for Alarm Lo register in celcius
-        /// Min -55, Max 150
+        /// Min -55, Max 125
         /// </summary>
         private sbyte tempLoAlarm;
         public sbyte TempLoAlarm
