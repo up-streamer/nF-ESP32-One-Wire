@@ -74,6 +74,18 @@ namespace nanoFramework.Companion.Drivers.Sensors
         /// </summary>
         public byte[] Address { get; private set; }
         /// <summary>
+        /// Set to true if more than one device connected ie network.
+        /// </summary>
+        public bool Multidrop { get; set; }
+        /// <summary>
+        /// Contains an array of address of all 18B20 devices on network
+        /// </summary>
+        public byte[][] AddressNet { get; private set; }
+        /// <summary>
+        /// Total number of 18B20 devices on network.
+        /// </summary>
+        public int TotalNet;
+        /// <summary>
         /// Accessor/Mutator for temperature in celcius
         /// </summary>
         public float TemperatureInCelcius { get; private set; }
@@ -132,17 +144,20 @@ namespace nanoFramework.Companion.Drivers.Sensors
         /// </summary>
         /// <param name="owBus">Which one wire controller (logical bus) to use</param>
         /// <param name="deviceAddr">The device address (if null, then this device will search for one on the bus and latch on to the first one found)</param>
+        /// <param name="Multidrop"> True for more than one sensor</param>
         /// <param name="Resolution">Sensor resolution</param>
-        public DS18B20(OneWireController owBus, byte[] deviceAddr = null, int Resolution = 3)
+        public DS18B20(OneWireController owBus, byte[] deviceAddr = null, bool multidrop = false, int resolution = 3)
         {
             _oneWire = owBus;
+            Multidrop = multidrop;
+            Resolution = resolution;
+
             if (deviceAddr != null)
             {
                 if (deviceAddr.Length != 8) throw new ArgumentException();//must be 8 bytes
                 if (deviceAddr[0] != FAMILY_CODE) throw new ArgumentException();//invalid family code
                 Address = deviceAddr;
             }
-
             TemperatureInCelcius = ERROR_TEMPERATURE;
             TempHiAlarm = 30; // Set default alarm values
             TempLoAlarm = 20;
@@ -167,27 +182,45 @@ namespace nanoFramework.Companion.Drivers.Sensors
         /// It will check for existence of a 1-wire device. If no address was provided, then the
         /// 1-wire bus will be searched and the first device that matches the family code will be latched on to.
         /// Developer should check for successful initialization by checking the Address property. 
-        /// It should have valid 64-bit value
+        /// It should have valid 64-bit value.
+        /// If in Multidrop mode will keep seaching until find last device, save all in AddressNet array.
         /// </summary>
         public override void Initialize()
         {
             bool found = true;
+            int i = 0;
             if (Address == null) //search for a device with the required family code
             {
                 found = false;
                 if (_oneWire.FindFirstDevice(true, false)) //Current nF firmware works if reset if performed before a find operation
                 {
-                    do
+                    //found the device
+                    if (Multidrop)
                     {
-                        if (_oneWire.SerialNumber[0] == FAMILY_CODE)
+                        do
                         {
-                            //found the device
-                            Address = new byte[_oneWire.SerialNumber.Length];
-                            Array.Copy(_oneWire.SerialNumber, Address, _oneWire.SerialNumber.Length);
-                            found = true;
-                            break;
-                        }
-                    } while (_oneWire.FindNextDevice(true, false));//keep searching until we get one                    
+                            if (_oneWire.SerialNumber[0] == FAMILY_CODE)
+                            {
+                                AddressNet[i] = new byte[_oneWire.SerialNumber.Length];
+                                Array.Copy(_oneWire.SerialNumber, AddressNet[i], _oneWire.SerialNumber.Length);
+                                i = i++;
+                            }
+                        } while (_oneWire.FindNextDevice(true, false));//Keep searching all 18b20
+                        TotalNet = i;
+                    }
+                    else
+                    {
+                        do
+                        {
+                            if (_oneWire.SerialNumber[0] == FAMILY_CODE)
+                            {
+                                Address = new byte[_oneWire.SerialNumber.Length];
+                                Array.Copy(_oneWire.SerialNumber, Address, _oneWire.SerialNumber.Length);
+                                break;
+                            }
+                        } while (_oneWire.FindNextDevice(true, false));//keep searching until we get one
+                    }
+                    found = true;
                 }
             }
             if (!found) throw new Exception();
@@ -281,7 +314,7 @@ namespace nanoFramework.Companion.Drivers.Sensors
         /// </summary>
         public override bool ConfigurationRead()
         {
-           bool _restore = false;
+            bool _restore = false;
             if (Address != null && Address.Length == 8 && Address[0] == FAMILY_CODE)
             {
                 //now write command and ROM at once
