@@ -189,6 +189,11 @@
             Specifies a Storage event.
             </summary>
         </member>
+        <member name="F:nanoFramework.Runtime.Events.EventCategory.Radio">
+            <summary>
+            Specifies a Radio event.
+            </summary>
+        </member>
         <member name="T:nanoFramework.Runtime.Events.NativeEventHandler">
             <summary>
             A multicast (combinable) delegate that defines the event handler for a native event.

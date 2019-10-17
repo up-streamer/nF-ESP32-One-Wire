@@ -84,7 +84,7 @@ namespace nanoFramework.Companion.Drivers.Sensors
         /// <summary>
         /// Total number of 18B20 devices on network.
         /// </summary>
-        public int TotalNet;
+        public int Found;
         /// <summary>
         /// Accessor/Mutator for temperature in celcius
         /// </summary>
@@ -187,28 +187,43 @@ namespace nanoFramework.Companion.Drivers.Sensors
         /// </summary>
         public override void Initialize()
         {
-            bool found = true;
-            int i = 0;
+            Found = 0;
+            ArrayList allDevices;
+            _oneWire.TouchReset();
+
             if (Address == null) //search for a device with the required family code
             {
-                found = false;
-                if (_oneWire.FindFirstDevice(true, false)) //Current nF firmware works if reset if performed before a find operation
+                //found the device
+                if (Multidrop)
                 {
-                    //found the device
-                    if (Multidrop)
+                    _oneWire.FindFirstDevice(true, false);
+                    allDevices = _oneWire.FindAllDevices();
+
+                    Console.WriteLine("allDevices Count = " + allDevices.Count.ToString());
+                    foreach (byte[] device in allDevices)
                     {
-                        do
+                        if (device[0] == FAMILY_CODE)
                         {
-                            if (_oneWire.SerialNumber[0] == FAMILY_CODE)
-                            {
-                                AddressNet[i] = new byte[_oneWire.SerialNumber.Length];
-                                Array.Copy(_oneWire.SerialNumber, AddressNet[i], _oneWire.SerialNumber.Length);
-                                i = i++;
-                            }
-                        } while (_oneWire.FindNextDevice(true, false));//Keep searching all 18b20
-                        TotalNet = i;
+                            Found++;
+                        }
+                    };
+                    
+                    if (Found > 0)
+                    {
+                        AddressNet = new byte[Found][];
+                        int i = 0;
+                        foreach (byte[] device in allDevices)
+                        {
+                            AddressNet[i] = new byte[device.Length];
+                            Array.Copy(device, AddressNet[i], device.Length);
+                            i++;
+                        }
+                        allDevices = null;
                     }
-                    else
+                }
+                else
+                {
+                    if (_oneWire.FindFirstDevice(true, false))
                     {
                         do
                         {
@@ -216,14 +231,15 @@ namespace nanoFramework.Companion.Drivers.Sensors
                             {
                                 Address = new byte[_oneWire.SerialNumber.Length];
                                 Array.Copy(_oneWire.SerialNumber, Address, _oneWire.SerialNumber.Length);
+                                Found = 1;
                                 break;
                             }
                         } while (_oneWire.FindNextDevice(true, false));//keep searching until we get one
                     }
-                    found = true;
                 }
+
             }
-            if (!found) throw new Exception();
+            if (Found == 0) throw new Exception();
         }
         /// <summary>
         /// Prepare sensor to read the data

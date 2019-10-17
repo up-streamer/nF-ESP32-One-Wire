@@ -3212,6 +3212,19 @@
             </summary>
             <param name="b">A 16-element byte array containing values with which to initialize the GUID.</param>
         </member>
+        <member name="M:System.Guid.#ctor(System.String)">
+            <summary>
+              Creates a new <see cref="T:System.Guid"/> based on the value in the string.  The value is made up
+              of hex digits speared by the dash ("-"). The string may begin and end with
+              brackets ("{", "}").
+              
+              The string must be of the form dddddddd-dddd-dddd-dddd-dddddddddddd. where
+              d is a hex digit. (That is 8 hex digits, followed by 4, then 4, then 4,
+              then 12) such as: "CA761232-ED42-11CE-BACD-00AA0057B223"
+            </summary>
+            <param name="g">String representation of new <see cref="T:System.Guid"/>.</param>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
         <member name="M:System.Guid.CompareTo(System.Object)">
             <summary>
             Compares this instance to a specified object and returns an indication of their relative values.
@@ -3254,6 +3267,29 @@
             Initializes a new instance of the <see cref="T:System.Guid"/> structure.
             </summary>
             <returns>A new GUID object.</returns>
+        </member>
+        <member name="M:System.Guid.TryParseGuidWithDashes(System.String,System.Guid@)">
+            <summary>
+              Creates a new <see cref="T:System.Guid"/> based on the value in the string.  The value is made up
+              of hex digits speared by the dash ("-"). The string may begin and end with
+              brackets ("{", "}").
+              
+              The string must be of the form dddddddd-dddd-dddd-dddd-dddddddddddd. where
+              d is a hex digit. (That is 8 hex digits, followed by 4, then 4, then 4,
+              then 12) such as: "CA761232-ED42-11CE-BACD-00AA0057B223"
+            </summary>
+            <param name="guidString">Guid string to parse.</param>
+            <param name="result">Resulting Guid.</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.Guid.HexStringToLong(System.String,System.Int32@,System.Int32)">
+            <summary>
+            Converts a hex sub-string to a long, while incrementing the parsePos.
+            </summary>
+            <param name="str">The string containing the hex sub-string.</param>
+            <param name="parsePos">The position of the hex sub-string within str.</param>
+            <param name="requiredLength">The length of the hex sub-string.</param>
+            <returns>False if any character is not a hex digit or string is shorter than needed for the requiredLength. Otherwise true.</returns>
         </member>
         <member name="T:System.IAsyncResult">
             <summary>

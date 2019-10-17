@@ -19,17 +19,19 @@ namespace OneWire_v3
                                     true, /* Multidrop, network*/
                                     3 /*3 decimal places is enough for us while reading temperature changes*/
                                     );
-
+          
             string devAddrStr = "";//store the device address as string...
 
-            ds18b20.Initialize(); //Initialize sensors
-
-            if (ds18b20.AddressNet != null)
+            ds18b20.Initialize(); //Initialize sensors / search for 18B20 devices
+            
+            if (ds18b20.AddressNet.Length > 0)
             {
-                for (int i = 1; i == ds18b20.AddressNet.Length; i++ )
+                Console.WriteLine("AdressNet SIZE = " + ds18b20.AddressNet.Length.ToString());
+                for (int i = 0; i < ds18b20.AddressNet.Length; i++ )
                 {
                     foreach (var addrByte in ds18b20.AddressNet[i]) devAddrStr += addrByte.ToString("X2");
                     Console.WriteLine("18b20-" + i.ToString("X2") + " " + devAddrStr);
+                    devAddrStr = "";
                 }
 
             }
