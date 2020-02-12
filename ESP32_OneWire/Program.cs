@@ -35,110 +35,132 @@ namespace OneWire_v3
                 }
 
             }
-            #region Single Drop Examples
-                //OneWireController oneWire = new OneWireController();
 
-                //DS18B20 ds18b20 = new DS18B20(oneWire,/* The 1-wire bus*/
-                //                        null, /*Let this driver find out a DS18B20 on the bus*/
-                //                        false, /* single drop, no network*/
-                //                        3 /*3 decimal places is enough for us while reading temperature changes*/
-                //                        );
+            int loopRead = 20;
 
-                ///*
-                // * NOTE: Limiting to the decimal places will not work when you do a "ToString" on floats.
-                // * The limit to decimal places is only for comparison. For exmaple, if last measured temperature value
-                // * was 25.3343567 and the next value is 25.3343667, then the difference between the two is about 0.00001.
-                // * If we limit to 3 decimal places, then the values are read as 25.334 and 25.334, resulting in a difference 
-                // * of zero. This is used to compute if sensors changed or not...more the number of decimal places, higher
-                // * is the change event possibility (because even a very small change will be registered)
-                // */
+            while (loopRead > 0)
+            {
+                for (int index = 0; index < ds18b20.AddressNet.Length; index++)
+                {
+                    //Select the device
+                    ds18b20.Address = ds18b20.AddressNet[index];
+                    devAddrStr = "";
+                    foreach (var addrByte in ds18b20.AddressNet[index]) devAddrStr += addrByte.ToString("X2");
 
-                //int loopCount = 3; //used later to limit test duration
-                //string devAddrStr = "";//store the device address as string...
+                    //Read Temperature
+                    ds18b20.PrepareToRead();
+                    ds18b20.Read();
+                    Console.WriteLine("DS18B20[" + devAddrStr + "] Sensor reading in One-Shot-mode; T=" + ds18b20.TemperatureInCelcius.ToString() + " C"); //"f2" two decimal point format.
+                    
+                    Thread.Sleep(4000);  
+                }
+                Console.WriteLine("LoopRead " + loopRead);
+                loopRead--;
+            }
+            #region Other Examples
+            //OneWireController oneWire = new OneWireController();
 
-                ///*********************************************************************************************************
-                // * This driver supports, one-shot , poll mode (meaning,you check the sensor for changes 
-                // * in temperature values) and event mode (meaning, the driver will alert you when 
-                // * temperature changes)
-                // *********************************************************************************************************/
-                ////One-Shot-mode example...
-                //ds18b20.Initialize(); //Initialize sensor
-                ///*After device gets initialized and if initialization is successful, the class DS18B20 should have an address*/
-                //if (ds18b20.Address != null && ds18b20.Address.Length == 8 && ds18b20.Address[0] == DS18B20.FAMILY_CODE)
-                //{
-                //    //Initialization successful...let's try to read the address
-                //    /*
-                //     * Since this class was initialized without an address, the Initialize() method will search for valid 
-                //     * devices on the bus, and select the first device of type DS18B20 on the bus. If you have multiple devices,
-                //     * You can use the OneWireController class's "Find" methods to first search for devices, and then initialize
-                //     * the class with an address.
-                //     */
-                //    foreach (var addrByte in ds18b20.Address) devAddrStr += addrByte.ToString("X2");
+            //DS18B20 ds18b20 = new DS18B20(oneWire,/* The 1-wire bus*/
+            //                        null, /*Let this driver find out a DS18B20 on the bus*/
+            //                        false, /* single drop, no network*/
+            //                        3 /*3 decimal places is enough for us while reading temperature changes*/
+            //                        );
 
-                //    ds18b20.PrepareToRead();
-                //    ds18b20.ConfigurationRead();
-                //    Console.WriteLine("Resolution = " + ds18b20.Resolution);
-                //    Console.WriteLine("Temperute Hi alarm =" + ds18b20.TempHiAlarm + " C");
-                //    Console.WriteLine("Temperute Lo alarm =" + ds18b20.TempLoAlarm + " C");
+            ///*
+            // * NOTE: Limiting to the decimal places will not work when you do a "ToString" on floats.
+            // * The limit to decimal places is only for comparison. For exmaple, if last measured temperature value
+            // * was 25.3343567 and the next value is 25.3343667, then the difference between the two is about 0.00001.
+            // * If we limit to 3 decimal places, then the values are read as 25.334 and 25.334, resulting in a difference 
+            // * of zero. This is used to compute if sensors changed or not...more the number of decimal places, higher
+            // * is the change event possibility (because even a very small change will be registered)
+            // */
 
-                //    ds18b20.Resolution = -4;
-                //    ds18b20.TempHiAlarm = -10;
-                //    ds18b20.TempLoAlarm = 10;
-                //    ds18b20.ConfigurationWrite();
-                //    ds18b20.PrepareToRead();
-                //    ds18b20.ConfigurationRead();
-                //    Console.WriteLine("New Resolution = " + ds18b20.Resolution);
-                //    Console.WriteLine("New Temperute Hi alarm = " + ds18b20.TempHiAlarm + " C");
-                //    Console.WriteLine("New Temperute Lo alarm = " + ds18b20.TempLoAlarm + " C");
+            //int loopCount = 3; //used later to limit test duration
+            //string devAddrStr = "";//store the device address as string...
 
-                //    int loopRead = 20;
+            ///*********************************************************************************************************
+            // * This driver supports, one-shot , poll mode (meaning,you check the sensor for changes 
+            // * in temperature values) and event mode (meaning, the driver will alert you when 
+            // * temperature changes)
+            // *********************************************************************************************************/
+            ////One-Shot-mode example...
+            //ds18b20.Initialize(); //Initialize sensor
+            ///*After device gets initialized and if initialization is successful, the class DS18B20 should have an address*/
+            //if (ds18b20.Address != null && ds18b20.Address.Length == 8 && ds18b20.Address[0] == DS18B20.FAMILY_CODE)
+            //{
+            //    //Initialization successful...let's try to read the address
+            //    /*
+            //     * Since this class was initialized without an address, the Initialize() method will search for valid 
+            //     * devices on the bus, and select the first device of type DS18B20 on the bus. If you have multiple devices,
+            //     * You can use the OneWireController class's "Find" methods to first search for devices, and then initialize
+            //     * the class with an address.
+            //     */
+            //    foreach (var addrByte in ds18b20.Address) devAddrStr += addrByte.ToString("X2");
 
-                //    while (loopRead > 0)
-                //    {
-                //        ds18b20.PrepareToRead();
-                //        ds18b20.Read();
-                //        Console.WriteLine("DS18B20[" + devAddrStr + "] Sensor reading in One-Shot-mode; T=" + ds18b20.TemperatureInCelcius.ToString() + " C"); //"f2" two decimal point format.
-                //        Thread.Sleep(4000);
-                //        loopRead--;
-                //    }
-                //}
+            //    ds18b20.PrepareToRead();
+            //    ds18b20.ConfigurationRead();
+            //    Console.WriteLine("Resolution = " + ds18b20.Resolution);
+            //    Console.WriteLine("Temperute Hi alarm =" + ds18b20.TempHiAlarm + " C");
+            //    Console.WriteLine("Temperute Lo alarm =" + ds18b20.TempLoAlarm + " C");
 
-                ///*Polled example*/
-                //loopCount = 3;
-                //ds18b20.Reset();
-                //ds18b20.Initialize();//after this device should have valid address...see above on how to check
+            //    ds18b20.Resolution = -4;
+            //    ds18b20.TempHiAlarm = -10;
+            //    ds18b20.TempLoAlarm = 10;
+            //    ds18b20.ConfigurationWrite();
+            //    ds18b20.PrepareToRead();
+            //    ds18b20.ConfigurationRead();
+            //    Console.WriteLine("New Resolution = " + ds18b20.Resolution);
+            //    Console.WriteLine("New Temperute Hi alarm = " + ds18b20.TempHiAlarm + " C");
+            //    Console.WriteLine("New Temperute Lo alarm = " + ds18b20.TempLoAlarm + " C");
 
-                //while (loopCount > 0)
-                //{
-                //    if (ds18b20.HasSensorValueChanged())
-                //    {
-                //        //no need to read again (like HTU21D)
-                //        Console.WriteLine("DS18B20[" + devAddrStr + "] in Poll-mode;T=" + ds18b20.TemperatureInCelcius.ToString());
-                //    }
-                //    loopCount--;
-                //}
+            //    int loopRead = 20;
 
-                ///*Event mode...*/
-                //loopCount = 3;
-                //ds18b20.Reset();
-                //ds18b20.Initialize(); //again, if initialization is successful, object will have valid address (see above)
-                //if (ds18b20.CanTrackChanges())
-                //{
-                //    ds18b20.SensorValueChanged += () =>
-                //    {
-                //        //no need to read again (like HTU21D)
-                //        Console.WriteLine("DS18B20 (" + devAddrStr + ") in Event-mode;T=" + ds18b20.TemperatureInCelcius.ToString());
-                //    };
-                //    ds18b20.BeginTrackChanges(2000/*track changes every 2 seconds*/);
-                //    while (loopCount > 0)
-                //    {
-                //        Thread.Sleep(3000);//Wait for a change...
-                //        loopCount--;
-                //    }
-                //    ds18b20.EndTrackChanges();
-                //}
-                //ds18b20.Dispose();
-                #endregion
+            //    while (loopRead > 0)
+            //    {
+            //        ds18b20.PrepareToRead();
+            //        ds18b20.Read();
+            //        Console.WriteLine("DS18B20[" + devAddrStr + "] Sensor reading in One-Shot-mode; T=" + ds18b20.TemperatureInCelcius.ToString() + " C"); //"f2" two decimal point format.
+            //        Thread.Sleep(4000);
+            //        loopRead--;
+            //    }
+            //}
+
+            ///*Polled example*/
+            //loopCount = 3;
+            //ds18b20.Reset();
+            //ds18b20.Initialize();//after this device should have valid address...see above on how to check
+
+            //while (loopCount > 0)
+            //{
+            //    if (ds18b20.HasSensorValueChanged())
+            //    {
+            //        //no need to read again (like HTU21D)
+            //        Console.WriteLine("DS18B20[" + devAddrStr + "] in Poll-mode;T=" + ds18b20.TemperatureInCelcius.ToString());
+            //    }
+            //    loopCount--;
+            //}
+
+            ///*Event mode...*/
+            //loopCount = 3;
+            //ds18b20.Reset();
+            //ds18b20.Initialize(); //again, if initialization is successful, object will have valid address (see above)
+            //if (ds18b20.CanTrackChanges())
+            //{
+            //    ds18b20.SensorValueChanged += () =>
+            //    {
+            //        //no need to read again (like HTU21D)
+            //        Console.WriteLine("DS18B20 (" + devAddrStr + ") in Event-mode;T=" + ds18b20.TemperatureInCelcius.ToString());
+            //    };
+            //    ds18b20.BeginTrackChanges(2000/*track changes every 2 seconds*/);
+            //    while (loopCount > 0)
+            //    {
+            //        Thread.Sleep(3000);//Wait for a change...
+            //        loopCount--;
+            //    }
+            //    ds18b20.EndTrackChanges();
+            //}
+            //ds18b20.Dispose();
+            #endregion
         }
 
     }
