@@ -4,61 +4,6 @@
         <name>mscorlib</name>
     </assembly>
     <members>
-        <member name="T:System.AppDomain">
-            <summary>
-            Represents an application domain, which is an isolated environment where applications execute. This class cannot be inherited.
-            </summary>
-        </member>
-        <member name="M:System.AppDomain.CreateDomain(System.String)">
-            <summary>
-            Creates a new application domain with the specified name.
-            </summary>
-            <param name="friendlyName">The friendly name of the domain.</param>
-            <returns>The newly created application domain.</returns>
-        </member>
-        <member name="M:System.AppDomain.CreateInstanceAndUnwrap(System.String,System.String)">
-            <summary>
-            Creates a new instance of the specified type. Parameters specify the assembly where the type is defined, and the name of the type.
-            </summary>
-            <param name="assemblyName">The display name of the assembly. See Assembly.FullName.</param>
-            <param name="typeName">The fully qualified name of the requested type, including the namespace but not the assembly, as returned by the Type.FullName property.</param>
-            <returns>An instance of the object specified by typeName.</returns>
-        </member>
-        <member name="P:System.AppDomain.CurrentDomain">
-            <summary>
-            Gets the current application domain for the current Thread.
-            </summary>
-            <value>
-            The current application domain.
-            </value>
-        </member>
-        <member name="P:System.AppDomain.FriendlyName">
-            <summary>
-            Gets the friendly name of this application domain.
-            </summary>
-            <value>
-            The friendly name of this application domain.
-            </value>
-        </member>
-        <member name="M:System.AppDomain.Load(System.String)">
-            <summary>
-            Loads an Assembly given its display name.
-            </summary>
-            <param name="assemblyString">The display name of the assembly. See Assembly.FullName.</param>
-            <returns>The loaded assembly.</returns>
-        </member>
-        <member name="M:System.AppDomain.GetAssemblies">
-            <summary>
-            Gets the assemblies that have been loaded into the execution context of this application domain.
-            </summary>
-            <returns>An array of assemblies in this application domain.</returns>
-        </member>
-        <member name="M:System.AppDomain.Unload(System.AppDomain)">
-            <summary>
-            Unloads the specified application domain.
-            </summary>
-            <param name="domain">An application domain to unload.</param>
-        </member>
         <member name="T:System.AppDomainUnloadedException">
             <summary>
             The exception that is thrown when an attempt is made to access an unloaded application domain.
@@ -219,7 +164,8 @@
             <returns>A new one-dimensional Array of the specified Type with the specified length, using zero-based indexing.</returns>
             <remarks><para>Unlike most classes, Array provides the CreateInstance method, instead of public constructors, to allow for late bound access.</para>
             <para>Reference-type elements are initialized to nullNothingnullptrunit a null reference(Nothing in Visual Basic). Value-type elements are initialized to zero.</para>
-            <para>This method is an O(n) operation, where n is length.</para></remarks>
+            <para>This method is an O(n) operation, where n is length.</para>
+            Available only in mscorlib build with support for System.Reflection.</remarks>
         </member>
         <member name="M:System.Array.Copy(System.Array,System.Array,System.Int32)">
             <summary>
@@ -299,6 +245,7 @@
             Creates a shallow copy of the <see cref="T:System.Array"/>.
             </summary>
             <returns>A shallow copy of the <see cref="T:System.Array"/>.</returns>
+            <remarks>Available only in mscorlib build with support for System.Reflection.</remarks>
         </member>
         <member name="M:System.Array.BinarySearch(System.Array,System.Object,System.Collections.IComparer)">
             <summary>
@@ -963,6 +910,7 @@
             Copies the elements of the <see cref="T:System.Collections.ArrayList"/> to a new <see cref="T:System.Object"/> array.
             </summary>
             <returns>An Object array containing copies of the elements of the <see cref="T:System.Collections.ArrayList"/>.</returns>
+            <remarks>Available only in mscorlib build with support for System.Reflection.</remarks>
         </member>
         <member name="M:System.Collections.ArrayList.ToArray(System.Type)">
             <summary>
@@ -970,178 +918,6 @@
             </summary>
             <param name="type">The element Type of the destination array to create and copy elements to.</param>
             <returns>An array of the specified element type containing copies of the elements of the <see cref="T:System.Collections.ArrayList"/>.</returns>
-        </member>
-        <member name="T:System.Collections.DictionaryEntry">
-            <summary>
-            Defines a dictionary key/value pair that can be set or retrieved.
-            </summary>
-        </member>
-        <member name="F:System.Collections.DictionaryEntry.Key">
-            <summary>
-            Gets or sets the key in the key/value pair.
-            </summary>
-            <returns>The key in the key/value pair.</returns>
-        </member>
-        <member name="F:System.Collections.DictionaryEntry.Value">
-            <summary>
-            Gets or sets the value in the key/value pair.
-            </summary>
-            <returns>The value in the key/value pair.</returns>
-        </member>
-        <member name="M:System.Collections.DictionaryEntry.#ctor(System.Object,System.Object)">
-            <summary>
-            Initializes an instance of the DictionaryEntry type with the specified key and value.
-            </summary>
-            <param name="key">The object defined in each key/value pair.</param>
-            <param name="value">The definition associated with key.</param>
-        </member>
-        <member name="T:System.Collections.Hashtable">
-            <summary>
-            HashTable is an Associative Container.
-            Created in March 2010.
-            by Eric Harlow.
-            </summary>
-        </member>
-        <member name="M:System.Collections.Hashtable.#ctor">
-            <summary>
-            Initializes a new, empty instance of the Hashtable class using the default initial capacity and load factor.
-            </summary>
-        </member>
-        <member name="M:System.Collections.Hashtable.#ctor(System.Int32)">
-            <summary>
-            Initializes a new, empty instance of the Hashtable class using the specified initial capacity, 
-            and the default load factor.
-            </summary>
-            <param name="capacity">The initial capacity of the HashTable</param>
-        </member>
-        <member name="M:System.Collections.Hashtable.#ctor(System.Int32,System.Int32)">
-            <summary>
-            Initializes a new, empty instance of the Hashtable class using the specified initial capacity, 
-            load factor.
-            </summary>
-            <param name="capacity">The initial capacity of the HashTable</param>
-            <param name="maxLoadFactor">The load factor to cause a rehash</param>
-        </member>
-        <member name="P:System.Collections.Hashtable.MaxLoadFactor">
-            <summary>
-            MaxLoadFactor Property is the value used to trigger a rehash.
-            Default value is 2.
-            A higher number can decrease lookup performance for large collections.
-            While a value of 1 maintains a constant time complexity at the cost of increased memory requirements.   
-            </summary>
-        </member>
-        <member name="P:System.Collections.Hashtable.GrowthFactor">
-            <summary>
-            GrowthFactor Property is a multiplier to increase the HashTable size by during a rehash.
-            Default value is 2.
-            </summary>
-        </member>
-        <member name="M:System.Collections.Hashtable.Clone">
-            <summary>
-            Make a new object which is a copy of the object instanced.
-            </summary>
-            <returns>A new object that represents a clone of the object.</returns>
-        </member>
-        <member name="M:System.Collections.Hashtable.GetEnumerator">
-            <summary>
-            Returns an enumerator that iterates through a collection.
-            </summary>
-            <returns>An IEnumerator object that can be used to iterate through the collection.</returns>
-        </member>
-        <member name="P:System.Collections.Hashtable.Count">
-            <summary>
-            Gets the number of elements contained in the ICollection.
-            </summary>
-            <value>
-            The number of elements contained in the ICollection.
-            </value>
-        </member>
-        <member name="P:System.Collections.Hashtable.IsSynchronized">
-            <summary>
-            Gets a value indicating whether access to the ICollection is synchronized (thread safe).
-            </summary>
-            <value>
-            true if access to the ICollection is synchronized (thread safe); otherwise, false.
-            </value>
-        </member>
-        <member name="P:System.Collections.Hashtable.SyncRoot">
-            <summary>
-            Gets an object that can be used to synchronize access to the ICollection.
-            </summary>
-            <value>
-            An object that can be used to synchronize access to the ICollection.
-            </value>
-        </member>
-        <member name="M:System.Collections.Hashtable.CopyTo(System.Array,System.Int32)">
-            <summary>
-            Copies the elements of the ICollection to an Array, starting at a particular Array index.
-            </summary>
-            <param name="array">The one-dimensional Array that is the destination of the elements copied from ICollection. The Array must have zero-based indexing.</param>
-            <param name="index">The zero-based index in array at which copying begins.</param>
-        </member>
-        <member name="P:System.Collections.Hashtable.IsReadOnly">
-            <summary>
-            Gets a value indicating whether the IDictionary object is read-only.
-            </summary>
-            <value>
-            true if the IDictionary object is read-only; otherwise, false.
-            </value>
-        </member>
-        <member name="P:System.Collections.Hashtable.IsFixedSize">
-            <summary>
-            Gets a value indicating whether the IDictionary object has a fixed size.
-            </summary>
-            <value>
-            true if the IDictionary object has a fixed size; otherwise, false.
-            </value>
-        </member>
-        <member name="P:System.Collections.Hashtable.Keys">
-            <summary>
-            Gets an ICollection object containing the keys of the IDictionary object.
-            </summary>
-            <value>
-            An ICollection object containing the keys of the IDictionary object.
-            </value>
-        </member>
-        <member name="P:System.Collections.Hashtable.Values">
-            <summary>
-            Gets an ICollection object containing the values in the IDictionary object.
-            </summary>
-            <value>
-            An ICollection object containing the values in the IDictionary object.
-            </value>
-        </member>
-        <member name="P:System.Collections.Hashtable.Item(System.Object)">
-            <summary>
-            Gets or sets the element with the specified key.
-            </summary>
-            <param name="key">The key of the element to get or set.</param>
-            <returns>The element with the specified key, or <see langword="null"/> if the key does not exist.</returns>
-        </member>
-        <member name="M:System.Collections.Hashtable.Add(System.Object,System.Object)">
-            <summary>
-            Adds an element with the provided key and value to the IDictionary object.
-            </summary>
-            <param name="key">The Object to use as the key of the element to add.</param>
-            <param name="value">The Object to use as the value of the element to add.</param>
-        </member>
-        <member name="M:System.Collections.Hashtable.Clear">
-            <summary>
-            Removes all elements from the IDictionary object.
-            </summary>
-        </member>
-        <member name="M:System.Collections.Hashtable.Contains(System.Object)">
-            <summary>
-            Determines whether the IDictionary object contains an element with the specified key.
-            </summary>
-            <param name="key">The key to locate in the IDictionary object.</param>
-            <returns>true if the IDictionary contains an element with the key; otherwise, false.</returns>
-        </member>
-        <member name="M:System.Collections.Hashtable.Remove(System.Object)">
-            <summary>
-            Removes the element with the specified key from the IDictionary object.
-            </summary>
-            <param name="key">The key of the element to remove.</param>
         </member>
         <member name="T:System.Collections.ICollection">
             <summary>
@@ -1195,75 +971,6 @@
             <para>Zero : x equals y.</para>
             <para>Greater than zero : x is greater than y.</para>
             </returns>
-        </member>
-        <member name="T:System.Collections.IDictionary">
-            <summary>
-            Represents a nongeneric collection of key/value pairs.
-            </summary>
-        </member>
-        <member name="P:System.Collections.IDictionary.IsReadOnly">
-            <summary>
-            Gets a value indicating whether the IDictionary object is read-only.
-            </summary>
-            <value>
-            true if the IDictionary object is read-only; otherwise, false.
-            </value>
-        </member>
-        <member name="P:System.Collections.IDictionary.IsFixedSize">
-            <summary>
-            Gets a value indicating whether the IDictionary object has a fixed size.
-            </summary>
-            <value>
-            true if the IDictionary object has a fixed size; otherwise, false.
-            </value>
-        </member>
-        <member name="P:System.Collections.IDictionary.Keys">
-            <summary>
-            Gets an ICollection object containing the keys of the IDictionary object.
-            </summary>
-            <value>
-            An ICollection object containing the keys of the IDictionary object.
-            </value>
-        </member>
-        <member name="P:System.Collections.IDictionary.Values">
-            <summary>
-            Gets an ICollection object containing the values in the IDictionary object.
-            </summary>
-            <value>
-            An ICollection object containing the values in the IDictionary object.
-            </value>
-        </member>
-        <member name="P:System.Collections.IDictionary.Item(System.Object)">
-            <summary>
-            Gets or sets the element with the specified key.
-            </summary>
-            <param name="key">The key of the element to get or set.</param>
-            <returns>The element with the specified key, or <see langword="null"/> if the key does not exist.</returns>
-        </member>
-        <member name="M:System.Collections.IDictionary.Add(System.Object,System.Object)">
-            <summary>
-            Adds an element with the provided key and value to the IDictionary object.
-            </summary>
-            <param name="key">The Object to use as the key of the element to add.</param>
-            <param name="value">The Object to use as the value of the element to add.</param>
-        </member>
-        <member name="M:System.Collections.IDictionary.Clear">
-            <summary>
-            Removes all elements from the IDictionary object.
-            </summary>
-        </member>
-        <member name="M:System.Collections.IDictionary.Contains(System.Object)">
-            <summary>
-            Determines whether the IDictionary object contains an element with the specified key.
-            </summary>
-            <param name="key">The key to locate in the IDictionary object.</param>
-            <returns>true if the IDictionary contains an element with the key; otherwise, false.</returns>
-        </member>
-        <member name="M:System.Collections.IDictionary.Remove(System.Object)">
-            <summary>
-            Removes the element with the specified key from the IDictionary object.
-            </summary>
-            <param name="key">The key of the element to remove.</param>
         </member>
         <member name="T:System.Collections.IEnumerable">
             <summary>
@@ -1395,171 +1102,6 @@
             Removes the IList item at the specified index.
             </summary>
             <param name="index">The zero-based index of the item to remove.</param>
-        </member>
-        <member name="T:System.Collections.Queue">
-            <summary>
-            A circular-array implementation of a queue. Enqueue can be O(n).  Dequeue is O(1).
-            </summary>
-        </member>
-        <member name="M:System.Collections.Queue.#ctor">
-            <summary>
-            Initializes a new instance of the Queue class that is empty, has the default initial
-            capacity, and uses the default growth factor (2x).
-            </summary>
-        </member>
-        <member name="P:System.Collections.Queue.Count">
-            <summary>
-            Gets the number of elements contained in the Queue.
-            </summary>
-        </member>
-        <member name="M:System.Collections.Queue.Clone">
-            <summary>
-            Creates a shallow copy of the Queue.
-            </summary>
-            <returns>A shallow copy of the Queue.</returns>
-        </member>
-        <member name="P:System.Collections.Queue.IsSynchronized">
-            <summary>
-            Gets a value indicating whether access to the Queue is synchronized (thread safe).
-            Always return false.
-            </summary>
-        </member>
-        <member name="P:System.Collections.Queue.SyncRoot">
-            <summary>
-            Gets an object that can be used to synchronize access to the Queue.
-            </summary>
-        </member>
-        <member name="M:System.Collections.Queue.Clear">
-            <summary>
-            Removes all objects from the Queue.
-            </summary>
-        </member>
-        <member name="M:System.Collections.Queue.CopyTo(System.Array,System.Int32)">
-            <summary>
-            Copies the Queue elements to an existing one-dimensional Array, starting at
-            the specified array index.
-            </summary>
-            <param name="array">The one-dimensional Array that is the destination of the elements copied from Queue.</param>
-            <param name="index">The zero-based index in array at which copying begins.</param>
-        </member>
-        <member name="M:System.Collections.Queue.Enqueue(System.Object)">
-            <summary>
-            Adds an object to the end of the Queue.
-            </summary>
-            <param name="obj">The object to add to the Queue.</param>
-        </member>
-        <member name="M:System.Collections.Queue.GetEnumerator">
-            <summary>
-            Returns an enumerator that iterates through the Queue.
-            </summary>
-            <returns>An IEnumerator for the Queue.</returns>
-        </member>
-        <member name="M:System.Collections.Queue.Dequeue">
-            <summary>
-            Removes and returns the object at the beginning of the Queue.
-            </summary>
-            <returns>The object that is removed from the beginning of the Queue.</returns>
-        </member>
-        <member name="M:System.Collections.Queue.Peek">
-            <summary>
-            Returns the object at the beginning of the Queue without removing it.
-            </summary>
-            <returns>The object at the beginning of the Queue.</returns>
-        </member>
-        <member name="M:System.Collections.Queue.Contains(System.Object)">
-            <summary>
-            Determines whether an element is in the Queue.
-            </summary>
-            <param name="obj">The Object to locate in the Queue.</param>
-            <returns>true if obj is found in the Queue; otherwise, false.</returns>
-        </member>
-        <member name="M:System.Collections.Queue.ToArray">
-            <summary>
-            Copies the Queue elements to a new array. The order of the elements in the new
-            array is the same as the order of the elements from the beginning of the Queue
-            to its end.
-            </summary>
-            <returns>A new array containing elements copied from the Queue.</returns>
-        </member>
-        <member name="T:System.Collections.Stack">
-            <summary>
-            An array implementation of a stack. Push can be O(n). Pop is O(1).
-            </summary>
-        </member>
-        <member name="M:System.Collections.Stack.#ctor">
-            <summary>
-            Initializes a new instance of the Stack class that is empty and has the default initial capacity.
-            </summary>
-        </member>
-        <member name="P:System.Collections.Stack.Count">
-            <summary>
-            Size of the stack
-            </summary>
-        </member>
-        <member name="P:System.Collections.Stack.IsSynchronized">
-            <summary>
-            Returns whether the current stack is synchornized. Always return false.
-            </summary>
-        </member>
-        <member name="P:System.Collections.Stack.SyncRoot">
-            <summary>
-            Gets an object that can be used to synchronize access to the Stack.
-            </summary>
-        </member>
-        <member name="M:System.Collections.Stack.Clear">
-            <summary>
-            Removes all Objects from the Stack.
-            </summary>
-        </member>
-        <member name="M:System.Collections.Stack.Clone">
-            <summary>
-            Creates a shallow copy of the Stack.
-            </summary>
-            <returns>A shallow copy of the Stack.</returns>
-        </member>
-        <member name="M:System.Collections.Stack.Contains(System.Object)">
-            <summary>
-            Determines whether an element is in the Stack.
-            </summary>
-            <param name="obj">The Object to locate in the Stack.</param>
-            <returns>true, if obj is found in the Stack; otherwise, false</returns>
-        </member>
-        <member name="M:System.Collections.Stack.CopyTo(System.Array,System.Int32)">
-            <summary>
-            Copies the Stack to an existing one-dimensional Array, starting at the specified array index.
-            </summary>
-            <param name="array">The one-dimensional Array that is the destination of the elements copied from Stack.</param>
-            <param name="index">The zero-based index in array at which copying begins.</param>
-        </member>
-        <member name="M:System.Collections.Stack.GetEnumerator">
-            <summary>
-            Returns an IEnumerator for this Stack.
-            </summary>
-            <returns>An IEnumerator for the Stack.</returns>
-        </member>
-        <member name="M:System.Collections.Stack.Peek">
-            <summary>
-            Returns the object at the top of the Stack without removing it.
-            </summary>
-            <returns>The Object at the top of the Stack.</returns>
-        </member>
-        <member name="M:System.Collections.Stack.Pop">
-            <summary>
-            Removes and returns the object at the top of the Stack.
-            </summary>
-            <returns>The Object removed from the top of the Stack.</returns>
-        </member>
-        <member name="M:System.Collections.Stack.Push(System.Object)">
-            <summary>
-            Inserts an object at the top of the Stack.
-            </summary>
-            <param name="obj">The Object to push onto the Stack.</param>
-        </member>
-        <member name="M:System.Collections.Stack.ToArray">
-            <summary>
-            Copies the Stack to a new array, in the same order Pop would return the items.
-            </summary>
-            <returns>A new array containing copies of the elements of the Stack.</returns>
         </member>
         <member name="T:System.ComponentModel.EditorBrowsableState">
             <summary>
@@ -1755,6 +1297,13 @@
             </summary>
             <param name="value">A string that contains the number to convert.</param>
             <returns>A double-precision floating-point number that is equivalent to the number in value, or 0 (zero) if value is <see langword="null"/>.</returns>
+        </member>
+        <member name="M:System.Convert.ToSingle(System.String)">
+            <summary>
+            Converts the specified string representation of a number to an equivalent single-precision floating-point number.
+            </summary>
+            <param name="value">A string that contains the number to convert.</param>
+            <returns>A single-precision floating-point number that is equivalent to the number in value, or 0 (zero) if value is <see langword="null"/>.</returns>
         </member>
         <member name="M:System.Convert.ToBase64String(System.Byte[])">
             <summary>
@@ -2403,6 +1952,7 @@
             <value>
             A MethodInfo describing the method represented by the delegate.
             </value>
+            <remarks>Available only in mscorlib build with support for System.Reflection.</remarks>
         </member>
         <member name="M:System.Delegate.GetInvocationList">
             <summary>
@@ -2648,6 +2198,7 @@
             <summary>
             Specifies the display proxy for a type.
             </summary>
+            <remarks>Available only in mscorlib build with support for System.Reflection.</remarks>
         </member>
         <member name="M:System.Diagnostics.DebuggerTypeProxyAttribute.#ctor(System.Type)">
             <summary>
@@ -2763,13 +2314,17 @@
             Represents a value that is not a number (NaN). This field is constant.
             </summary>
         </member>
-        <member name="M:System.Double.CompareTo(System.Double,System.Double)">
+        <member name="M:System.Double.CompareTo(System.Double)">
             <summary>
-            Documentation missing
+            Compares this instance to a specified double-precision floating-point number and returns an integer that indicates whether the value of this instance is less than, equal to, or greater than the value of the specified double-precision floating-point number.
             </summary>
-            <param name="d">Documentation missing</param>
-            <param name="value">Documentation missing</param>
-            <returns>Documentation missing</returns>
+            <param name="d">A double-precision floating-point number to compare.</param>
+            <param name="value">A double-precision floating-point number to compare.</param>
+            <returns>A signed number indicating the relative values of this instance and value.
+            Less than zero: This instance is less than value. -or- This instance is not a number (<see cref="F:System.Double.NaN"/>) and value is a number.
+            Zero: This instance is equal to value. -or- Both this instance and value are not a number (<see cref="F:System.Double.NaN"/>), <see cref="F:System.Double.PositiveInfinity"/>, or <see cref="F:System.Double.NegativeInfinity"/>. 
+            Greater than zero: This instance is greater than value. -or- This instance is a number and value is not a number (<see cref="F:System.Double.NaN"/>). 
+            </returns>
         </member>
         <member name="M:System.Double.IsInfinity(System.Double)">
             <summary>
@@ -2846,6 +2401,7 @@
             Converts the value of this instance to its equivalent string representation.
             </summary>
             <returns>The string representation of the value of this instance.</returns>
+            <remarks>Available only in mscorlib build with support for System.Reflection.</remarks>
         </member>
         <member name="T:System.Console">
             <summary>
@@ -3327,6 +2883,7 @@
             <summary>
             Defines a method that supports custom formatting of the value of an object.
             </summary>
+            <remarks>Available only in mscorlib build with support for System.Reflection.</remarks>
         </member>
         <member name="M:System.ICustomFormatter.Format(System.String,System.Object,System.IFormatProvider)">
             <summary>
@@ -3351,6 +2908,7 @@
             <summary>
             Provides a mechanism for retrieving an object to control formatting.
             </summary>
+            <remarks>Available only in mscorlib build with support for System.Reflection.</remarks>
         </member>
         <member name="M:System.IFormatProvider.GetFormat(System.Type)">
             <summary>
@@ -3363,6 +2921,7 @@
             <summary>
             Provides functionality to format the value of an object into a string representation.
             </summary>
+            <remarks>Available only in mscorlib build with support for System.Reflection.</remarks>
         </member>
         <member name="M:System.IFormattable.ToString(System.String,System.IFormatProvider)">
             <summary>
@@ -3952,6 +3511,7 @@
             Returns a string that represents the current object.
             </summary>
             <returns>A string that represents the current object.</returns>
+            <remarks>Available only in mscorlib build with support for System.Reflection.</remarks>
         </member>
         <member name="M:System.Object.Equals(System.Object)">
             <summary>
@@ -3987,6 +3547,7 @@
             Gets the Type of the current instance.
             </summary>
             <returns>The exact runtime type of the current instance.</returns>
+            <remarks>Available only in mscorlib build with support for System.Reflection.</remarks>
         </member>
         <member name="M:System.Object.MemberwiseClone">
             <summary>
@@ -4146,6 +3707,7 @@
             <summary>
             Describes an assembly's unique identity in full.
             </summary>
+            <remarks>Available only in mscorlib build with support for System.Reflection.</remarks>
         </member>
         <member name="P:System.Reflection.AssemblyName.Name">
             <summary>
@@ -4341,6 +3903,7 @@
             Specifies a bitwise combination of AssemblyNameFlags flags for an assembly, describing just-in-time (JIT) compiler options,
             whether the assembly is retargetable, and whether it has a full or tokenized public key. This class cannot be inherited.
             </summary>
+            <remarks>Available only in mscorlib build with support for System.Reflection.</remarks>
         </member>
         <member name="M:System.Reflection.AssemblyFlagsAttribute.#ctor(System.UInt32)">
             <summary>
@@ -4411,6 +3974,7 @@
             <summary>
             Provides information about an Assembly reference.
             </summary>
+            <remarks>Available only in mscorlib build with support for System.Reflection.</remarks>
         </member>
         <member name="F:System.Reflection.AssemblyNameFlags.None">
             <summary>
@@ -4642,11 +4206,13 @@
             <summary>
             Selects a member from a list of candidates, and performs type conversion from actual argument type to formal argument type.
             </summary>
+            <remarks>Available only in mscorlib build with support for System.Reflection.</remarks>
         </member>
         <member name="T:System.Reflection.BindingFlags">
             <summary>
             Specifies flags that control binding and the way in which the search for members and types is conducted by reflection.
             </summary>
+            <remarks>Available only in mscorlib build with support for System.Reflection.</remarks>
         </member>
         <member name="F:System.Reflection.BindingFlags.Default">
             <summary>
@@ -4764,6 +4330,7 @@
             <summary>
             Discovers the attributes of a class constructor and provides access to constructor metadata.
             </summary>
+            <remarks>Available only in mscorlib build with support for System.Reflection.</remarks>
         </member>
         <member name="P:System.Reflection.ConstructorInfo.MemberType">
             <summary>
@@ -4796,6 +4363,7 @@
             <summary>
             Defines the member of a type that is the default member used by InvokeMember.
             </summary>
+            <remarks>Available only in mscorlib build with support for System.Reflection.</remarks>
         </member>
         <member name="M:System.Reflection.DefaultMemberAttribute.#ctor(System.String)">
             <summary>
@@ -4816,6 +4384,7 @@
             <summary>
             Discovers the attributes of a field and provides access to field metadata.
             </summary>
+            <remarks>Available only in mscorlib build with support for System.Reflection.</remarks>
         </member>
         <member name="P:System.Reflection.FieldInfo.MemberType">
             <summary>
@@ -4861,6 +4430,7 @@
             <summary>
             Interoperates with the IDispatch interface.
             </summary>
+            <remarks>Available only in mscorlib build with support for System.Reflection.</remarks>
         </member>
         <member name="M:System.Reflection.IReflect.GetMethod(System.String,System.Reflection.BindingFlags)">
             <summary>
@@ -4882,6 +4452,7 @@
             <summary>
             Obtains information about the attributes of a member and provides access to member metadata.
             </summary>
+            <remarks>Available only in mscorlib build with support for System.Reflection.</remarks>
         </member>
         <member name="P:System.Reflection.MemberInfo.MemberType">
             <summary>
@@ -4918,6 +4489,7 @@
             <summary>
             Marks each type of member that is defined as a derived class of MemberInfo.
             </summary>
+            <remarks>Available only in mscorlib build with support for System.Reflection.</remarks>
         </member>
         <member name="F:System.Reflection.MemberTypes.Constructor">
             <summary>
@@ -4968,6 +4540,7 @@
             <summary>
             Provides information about methods and constructors.
             </summary>
+            <remarks>Available only in mscorlib build with support for System.Reflection.</remarks>
         </member>
         <member name="P:System.Reflection.MethodBase.IsPublic">
             <summary>
@@ -5116,6 +4689,7 @@
             <summary>
             Discovers the attributes of a method and provides access to method metadata.
             </summary>
+            <remarks>Available only in mscorlib build with support for System.Reflection.</remarks>
         </member>
         <member name="P:System.Reflection.MethodInfo.MemberType">
             <summary>
@@ -5138,6 +4712,7 @@
             <summary>
             Discovers the attributes of a property and provides access to property metadata.
             </summary>
+            <remarks>Available only in mscorlib build with support for System.Reflection.</remarks>
         </member>
         <member name="P:System.Reflection.PropertyInfo.PropertyType">
             <summary>
@@ -5162,19 +4737,6 @@
             <param name="obj">The object whose property value will be set.</param>
             <param name="value">The new property value.</param>
             <param name="index">Optional index values for indexed properties. This value should be null for non-indexed properties.</param>
-        </member>
-        <member name="T:System.Resources.ResourceManager">
-            <summary>
-            Represents a resource manager that provides convenient access to culture-specific resources at run time.
-            </summary>
-        </member>
-        <member name="M:System.Resources.ResourceManager.#ctor(System.String,System.Reflection.Assembly)">
-            <summary>
-            Initializes a new instance of the ResourceManager class that looks up resources contained in files with the specified root name in the given assembly.
-            </summary>
-            <param name="baseName">The root name of the resource file without its extension but including any fully qualified namespace name. 
-            For example, the root name for the resource file named MyApplication.MyResource.en-US.resources is MyApplication.MyResource.</param>
-            <param name="assembly">The main assembly for the resources.</param>
         </member>
         <member name="T:System.RuntimeArgumentHandle">
             <summary>
@@ -5622,6 +5184,77 @@
             </summary>
             <remarks>The value of this constant is positive 3.40282347E+38.</remarks>
         </member>
+        <member name="F:System.Single.NegativeInfinity">
+            <summary>
+            Represents negative infinity. This field is constant.
+            </summary>
+        </member>
+        <member name="F:System.Single.PositiveInfinity">
+            <summary>
+            Represents positive infinity. This field is constant.
+            </summary>
+        </member>
+        <member name="F:System.Single.NaN">
+            <summary>
+            Represents a value that is not a number (NaN). This field is constant.
+            </summary>
+        </member>
+        <member name="M:System.Single.IsInfinity(System.Single)">
+            <summary>
+            Returns a value indicating whether the specified number evaluates to negative or positive infinity.
+            </summary>
+            <param name="f">A single-precision floating-point number. </param>
+            <returns>
+            <see langword="true"/> if f evaluates to <see cref="F:System.Single.PositiveInfinity"/> or <see cref="F:System.Single.NegativeInfinity"/>; otherwise, <see langword="false"/>.
+            </returns>
+        </member>
+        <member name="M:System.Single.IsNaN(System.Single)">
+            <summary>
+            Returns a value that indicates whether the specified value is not a number (<see cref="F:System.Single.NaN"/>).
+            </summary>
+            <param name="f">A single-precision floating-point number. </param>
+            <returns>
+            <see langword="true"/> if f evaluates to <see cref="F:System.Single.NaN"/>; otherwise, <see langword="false"/>.
+            </returns>
+        </member>
+        <member name="M:System.Single.IsNegativeInfinity(System.Single)">
+            <summary>
+            Returns a value indicating whether the specified number evaluates to negative infinity.
+            </summary>
+            <param name="f">A single-precision floating-point number.</param>
+            <returns>
+            <see langword="true"/> if f evaluates to <see cref="F:System.Single.NegativeInfinity"/>; otherwise, <see langword="false"/>.
+            </returns>
+        </member>
+        <member name="M:System.Single.IsPositiveInfinity(System.Single)">
+            <summary>
+            Returns a value indicating whether the specified number evaluates to positive infinity.
+            </summary>
+            <param name="f">A single-precision floating-point number. </param>
+            <returns>
+            <see langword="true"/> if d evaluates to <see cref="F:System.Single.PositiveInfinity"/>; otherwise, <see langword="false"/>.
+            </returns>
+        </member>
+        <member name="M:System.Single.CompareTo(System.Single)">
+            <summary>
+            Compares this instance to a specified single-precision floating-point number and returns an integer that indicates whether the value of this instance is less than, equal to, or greater than the value of the specified single-precision floating-point number.
+            </summary>
+            <param name="f">A single-precision floating-point number to compare.</param>
+            <param name="value">A single-precision floating-point number to compare.</param>
+            <returns>A signed number indicating the relative values of this instance and value.
+            Less than zero: This instance is less than value. -or- This instance is not a number (<see cref="F:System.Single.NaN"/>) and value is a number.
+            Zero: This instance is equal to value. -or- Both this instance and value are not a number (<see cref="F:System.Single.NaN"/>), <see cref="F:System.Single.PositiveInfinity"/>, or <see cref="F:System.Single.NegativeInfinity"/>. 
+            Greater than zero: This instance is greater than value. -or- This instance is a number and value is not a number (<see cref="F:System.Single.NaN"/>). 
+            </returns>
+        </member>
+        <member name="M:System.Single.Parse(System.String)">
+            <summary>
+            Converts the string representation of a number to its single-precision floating-point number equivalent.
+            </summary>
+            <param name="s">A string that contains a number to convert. </param>
+            <returns>A single-precision floating-point number equivalent to the numeric value or symbol specified in <code>s</code>.</returns>
+            <exception cref="T:System.ArgumentNullException"></exception>
+        </member>
         <member name="M:System.Single.ToString">
             <summary>
             Converts the numeric value of this instance to its equivalent string representation.
@@ -5634,6 +5267,14 @@
             </summary>
             <param name="format">A numeric format string.</param>
             <returns>The string representation of the value of this instance as specified by format.</returns>
+        </member>
+        <member name="M:System.Single.TryParse(System.String,System.Single@)">
+            <summary>
+            Converts the string representation of a number to its single-precision floating-point number equivalent. A return value indicates whether the conversion succeeded or failed.
+            </summary>
+            <param name="s">A string containing a number to convert. </param>
+            <param name="result">When this method returns, contains single-precision floating-point number equivalent to the numeric value or symbol contained in s, if the conversion succeeded, or zero if the conversion failed. The conversion fails if the s parameter is <see langword="null"/> or Empty, is not a number in a valid format, or represents a number less than <see cref="F:System.Single.MinValue"/> or greater than <see cref="F:System.Single.MaxValue"/>. This parameter is passed uninitialized; any value originally supplied in result will be overwritten.</param>
+            <returns><see langword="true"/> if s was converted successfully; otherwise, <see langword="false"/>.</returns>
         </member>
         <member name="T:System.String">
             <summary>
@@ -6096,440 +5737,6 @@
             <param name="message">The error message that explains the reason for the exception.</param>
             <param name="innerException">The exception that is the cause of the current exception. If the innerException parameter is not a null reference (Nothing in Visual Basic), the current exception is raised in a catch block that handles the inner exception.</param>
         </member>
-        <member name="T:System.Text.Decoder">
-            <summary>
-            Converts a sequence of encoded bytes into a set of characters.
-            </summary>
-        </member>
-        <member name="M:System.Text.Decoder.Convert(System.Byte[],System.Int32,System.Int32,System.Char[],System.Int32,System.Int32,System.Boolean,System.Int32@,System.Int32@,System.Boolean@)">
-            <summary>
-            Converts an array of encoded bytes to UTF-16 encoded characters and stores the result in a character array.
-            </summary>
-            <param name="bytes">A byte array to convert.</param>
-            <param name="byteIndex">The first element of bytes to convert.</param>
-            <param name="byteCount">The number of elements of bytes to convert.</param>
-            <param name="chars">An array to store the converted characters.</param>
-            <param name="charIndex">The first element of chars in which data is stored.</param>
-            <param name="charCount">The maximum number of elements of chars to use in the conversion.</param>
-            <param name="flush">true to indicate that no further data is to be converted; otherwise, false.</param>
-            <param name="bytesUsed">When this method returns, contains the number of bytes that were used in the conversion. This parameter is passed uninitialized.</param>
-            <param name="charsUsed">When this method returns, contains the number of characters from chars that were produced by the conversion. This parameter is passed uninitialized.</param>
-            <param name="completed">When this method returns, contains true if all the characters specified by byteCount were converted; otherwise, false. This parameter is passed uninitialized.</param>
-        </member>
-        <member name="T:System.Text.Encoding">
-            <summary>
-            Represents a character encoding.
-            </summary>
-        </member>
-        <member name="M:System.Text.Encoding.GetBytes(System.String)">
-            <summary>
-            When overridden in a derived class, encodes all the characters in the specified string into a sequence of bytes.
-            </summary>
-            <param name="s">The string containing the characters to encode.</param>
-            <returns>A byte array containing the results of encoding the specified set of characters.</returns>
-        </member>
-        <member name="M:System.Text.Encoding.GetBytes(System.String,System.Int32,System.Int32,System.Byte[],System.Int32)">
-            <summary>
-            When overridden in a derived class, encodes a set of characters from the specified string into the specified byte array.
-            </summary>
-            <param name="s">The string containing the set of characters to encode.</param>
-            <param name="charIndex">The index of the first character to encode.</param>
-            <param name="charCount">The number of characters to encode.</param>
-            <param name="bytes">The byte array to contain the resulting sequence of bytes.</param>
-            <param name="byteIndex">The index at which to start writing the resulting sequence of bytes.</param>
-            <returns>The actual number of bytes written into bytes.</returns>
-            <exception cref="T:System.NotImplementedException"></exception>
-        </member>
-        <member name="M:System.Text.Encoding.GetChars(System.Byte[])">
-            <summary>
-            When overridden in a derived class, decodes all the bytes in the specified byte array into a set of characters.
-            </summary>
-            <param name="bytes">The byte array containing the sequence of bytes to decode.</param>
-            <returns>A character array containing the results of decoding the specified sequence of bytes.</returns>
-            <exception cref="T:System.NotImplementedException"></exception>
-        </member>
-        <member name="M:System.Text.Encoding.GetChars(System.Byte[],System.Int32,System.Int32)">
-            <summary>
-            When overridden in a derived class, decodes a sequence of bytes from the specified byte array into a set of characters.
-            </summary>
-            <param name="bytes">The byte array containing the sequence of bytes to decode.</param>
-            <param name="byteIndex">The index of the first byte to decode.</param>
-            <param name="byteCount">The number of bytes to decode.</param>
-            <returns>A character array containing the results of decoding the specified sequence of bytes.</returns>
-            <exception cref="T:System.NotImplementedException"></exception>
-        </member>
-        <member name="M:System.Text.Encoding.GetString(System.Byte[],System.Int32,System.Int32)">
-            <summary>
-            When overridden in a derived class, decodes a sequence of bytes from the specified byte array into a <see cref="T:System.String"/>.
-            </summary>
-            <param name="bytes">The byte array containing the sequence of bytes to decode.</param>
-            <param name="index">The index of the first byte to decode.</param>
-            <param name="count">The number of bytes to decode.</param>
-            <returns>A <see cref="T:System.String"/> that contains the results of decoding the specified sequence of bytes.</returns>
-        </member>
-        <member name="M:System.Text.Encoding.GetDecoder">
-            <summary>
-            When overridden in a derived class, obtains a decoder that converts an encoded sequence of bytes into a sequence of characters.
-            </summary>
-            <returns>A Decoder that converts an encoded sequence of bytes into a sequence of characters.</returns>
-        </member>
-        <member name="P:System.Text.Encoding.UTF8">
-            <summary>
-            Gets an encoding for the UTF-8 format.
-            </summary>
-            <value> An encoding for the UTF-8 format. </value>
-        </member>
-        <member name="T:System.Text.StringBuilder">
-            <summary>
-            A Micro Framework port of the Full Framework StringBuilder. Contributed by Julius Friedman.
-            Represents a mutable string of characters. This class cannot be inherited.
-            </summary>
-        </member>
-        <member name="P:System.Text.StringBuilder.MaxCapacity">
-            <summary>
-            Gets the maximum capacity of this instance.
-            </summary>
-            <value>The maximum number of characters this instance can hold.</value>
-        </member>
-        <member name="P:System.Text.StringBuilder.Item(System.Int32)">
-            <summary>
-            Gets or sets the character at the specified character position in this instance.
-            </summary>
-            <param name="index">The position of the character.</param>
-            <returns>The Unicode character at position index.</returns>
-        </member>
-        <member name="P:System.Text.StringBuilder.Capacity">
-            <summary>
-            Gets or sets the maximum number of characters that can be contained in the memory allocated by the current instance.
-            </summary>
-            <value>
-            The maximum number of characters that can be contained in the memory allocated by the current instance. Its value can range from Length to MaxCapacity.
-            </value>
-            <exception cref="T:System.ArgumentOutOfRangeException"></exception>
-        </member>
-        <member name="P:System.Text.StringBuilder.Length">
-            <summary>
-            Gets or sets the length of the current StringBuilder object.
-            </summary>
-            <value>The length of this instance.</value>
-            <exception cref="T:System.ArgumentOutOfRangeException"></exception>
-        </member>
-        <member name="M:System.Text.StringBuilder.#ctor(System.String,System.Int32,System.Int32,System.Int32)">
-            <summary>
-            Initializes a new instance of the StringBuilder class from the specified substring and capacity. 
-            </summary>
-            <param name="value">The string that contains the substring used to initialize the value of this instance. If value is null, the new StringBuilder will contain the empty string (that is, it contains Empty).</param>
-            <param name="startIndex">The position within value where the substring begins.</param>
-            <param name="length">The number of characters in the substring.</param>
-            <param name="capacity">The suggested starting size of the StringBuilder.</param>
-        </member>
-        <member name="M:System.Text.StringBuilder.#ctor(System.String,System.Int32)">
-            <summary>
-            Initializes a new instance of the StringBuilder class using the specified string and capacity.
-            </summary>
-            <param name="value">The string used to initialize the value of the instance. If value is null, the new StringBuilder will contain the empty string (that is, it contains Empty).</param>
-            <param name="capacity">The suggested starting size of the StringBuilder.</param>
-        </member>
-        <member name="M:System.Text.StringBuilder.#ctor(System.Int32,System.Int32)">
-            <summary>
-            Initializes a new instance of the StringBuilder class that starts with a specified capacity and can grow to a specified maximum. 
-            </summary>
-            <param name="capacity">The suggested starting size of the StringBuilder.</param>
-            <param name="maxCapacity">The maximum number of characters the current string can contain.</param>
-        </member>
-        <member name="M:System.Text.StringBuilder.#ctor(System.Int32)">
-            <summary>
-            Initializes a new instance of the StringBuilder class using the specified capacity. 
-            </summary>
-            <param name="capacity">The suggested starting size of this instance.</param>
-        </member>
-        <member name="M:System.Text.StringBuilder.#ctor(System.String)">
-            <summary>
-            Initializes a new instance of the StringBuilder class using the specified string. 
-            </summary>
-            <param name="value">The string used to initialize the value of the instance. If value is null, the new StringBuilder will contain the empty string (that is, it contains Empty).</param>
-        </member>
-        <member name="M:System.Text.StringBuilder.#ctor">
-            <summary>
-            Initializes a new instance of the StringBuilder class. 
-            </summary>
-        </member>
-        <member name="M:System.Text.StringBuilder.Clear">
-            <summary>
-            Removes all characters from the current StringBuilder instance. 
-            </summary>
-            <returns>An object whose Length is 0 (zero).</returns>
-        </member>
-        <member name="M:System.Text.StringBuilder.Append(System.Boolean)">
-            <summary>
-            Appends the string representation of a specified Boolean value to this instance. 
-            </summary>
-            <param name="value">The Boolean value to append.</param>
-            <returns>A reference to this instance after the append operation has completed.</returns>
-        </member>
-        <member name="M:System.Text.StringBuilder.Append(System.Byte)">
-            <summary>
-            Appends the string representation of a specified 8-bit unsigned integer to this instance. 
-            </summary>
-            <param name="value">The value to append.</param>
-            <returns>A reference to this instance after the append operation has completed.</returns>
-        </member>
-        <member name="M:System.Text.StringBuilder.Append(System.Char)">
-            <summary>
-            Appends the string representation of a specified Unicode character to this instance. 
-            </summary>
-            <param name="value">The UTF-16-encoded code unit to append.</param>
-            <returns>A reference to this instance after the append operation has completed.</returns>
-        </member>
-        <member name="M:System.Text.StringBuilder.Append(System.Double)">
-            <summary>
-            Appends the string representation of a specified double-precision floating-point number to this instance. 
-            </summary>
-            <param name="value">The value to append.</param>
-            <returns>A reference to this instance after the append operation has completed.</returns>
-        </member>
-        <member name="M:System.Text.StringBuilder.Append(System.Int16)">
-            <summary>
-            Appends the string representation of a specified 16-bit signed integer to this instance. 
-            </summary>
-            <param name="value">The value to append.</param>
-            <returns>A reference to this instance after the append operation has completed.</returns>
-        </member>
-        <member name="M:System.Text.StringBuilder.Append(System.Char[])">
-            <summary>
-            Appends the string representation of the Unicode characters in a specified array to this instance. 
-            </summary>
-            <param name="value">The array of characters to append.</param>
-            <returns>A reference to this instance after the append operation has completed.</returns>
-        </member>
-        <member name="M:System.Text.StringBuilder.Append(System.Int32)">
-            <summary>
-            Appends the string representation of a specified 32-bit signed integer to this instance. 
-            </summary>
-            <param name="value">The value to append.</param>
-            <returns>A reference to this instance after the append operation has completed.</returns>
-        </member>
-        <member name="M:System.Text.StringBuilder.Append(System.Int64)">
-            <summary>
-            Appends the string representation of a specified 64-bit unsigned integer to this instance. 
-            </summary>
-            <param name="value">The value to append.</param>
-            <returns>A reference to this instance after the append operation has completed.</returns>
-        </member>
-        <member name="M:System.Text.StringBuilder.Append(System.Object)">
-            <summary>
-            Appends the string representation of a specified object to this instance. 
-            </summary>
-            <param name="value">The object to append.</param>
-            <returns>A reference to this instance after the append operation has completed.</returns>
-        </member>
-        <member name="M:System.Text.StringBuilder.Append(System.String)">
-            <summary>
-            Appends a copy of the specified string to this instance.
-            </summary>
-            <param name="value">The string to append.</param>
-            <returns>A reference to this instance after the append operation has completed.</returns>
-        </member>
-        <member name="M:System.Text.StringBuilder.Append(System.SByte)">
-            <summary>
-            Appends the string representation of a specified 8-bit signed integer to this instance. 
-            </summary>
-            <param name="value">The value to append.</param>
-            <returns>A reference to this instance after the append operation has completed.</returns>
-        </member>
-        <member name="M:System.Text.StringBuilder.Append(System.Single)">
-            <summary>
-            Appends the string representation of a specified double-precision floating-point number to this instance. 
-            </summary>
-            <param name="value">The value to append.</param>
-            <returns>A reference to this instance after the append operation has completed.</returns>
-        </member>
-        <member name="M:System.Text.StringBuilder.Append(System.UInt16)">
-            <summary>
-            Appends the string representation of a specified 16-bit unsigned integer to this instance. 
-            </summary>
-            <param name="value">The value to append.</param>
-            <returns>A reference to this instance after the append operation has completed.</returns>
-        </member>
-        <member name="M:System.Text.StringBuilder.Append(System.UInt32)">
-            <summary>
-            Appends the string representation of a specified 32-bit unsigned integer to this instance. 
-            </summary>
-            <param name="value">The value to append.</param>
-            <returns>A reference to this instance after the append operation has completed.</returns>
-        </member>
-        <member name="M:System.Text.StringBuilder.Append(System.UInt64)">
-            <summary>
-            Appends the string representation of a specified 64-bit unsigned integer to this instance. 
-            </summary>
-            <param name="value">The value to append.</param>
-            <returns>A reference to this instance after the append operation has completed.</returns>
-        </member>
-        <member name="M:System.Text.StringBuilder.Append(System.String,System.Int32,System.Int32)">
-            <summary>
-            Appends a copy of a specified substring to this instance. 
-            </summary>
-            <param name="value">The string that contains the substring to append.</param>
-            <param name="startIndex">The starting position of the substring within value.</param>
-            <param name="count">The number of characters in value to append.</param>
-            <returns>A reference to this instance after the append operation has completed.</returns>
-        </member>
-        <member name="M:System.Text.StringBuilder.Append(System.Char[],System.Int32,System.Int32)">
-            <summary>
-            Appends the string representation of a specified subarray of Unicode characters to this instance
-            </summary>
-            <param name="value">A character array. </param>
-            <param name="startIndex">The starting position in value. </param>
-            <param name="charCount">The number of characters to append.</param>
-            <returns>A reference to this instance after the append operation has completed.</returns>
-        </member>
-        <member name="M:System.Text.StringBuilder.Append(System.Char,System.Int32)">
-            <summary>
-            Appends a specified number of copies of the string representation of a Unicode character to this instance. 
-            </summary>
-            <param name="value">The character to append.</param>
-            <param name="repeatCount">The number of times to append value.</param>
-            <returns>A reference to this instance after the append operation has completed.</returns>
-        </member>
-        <member name="M:System.Text.StringBuilder.Remove(System.Int32,System.Int32)">
-            <summary>
-            Removes the specified range of characters from this instance. 
-            </summary>
-            <param name="startIndex">The zero-based position in this instance where removal begins.</param>
-            <param name="length">The number of characters to remove.</param>
-            <returns>A reference to this instance after the excise operation has completed.</returns>
-        </member>
-        <member name="M:System.Text.StringBuilder.ToString">
-            <summary>
-            Converts the value of this instance to a String. (Overrides Object.ToString().)
-            </summary>
-            <returns>A string whose value is the same as this instance.</returns>
-        </member>
-        <member name="M:System.Text.StringBuilder.ToString(System.Int32,System.Int32)">
-            <summary>
-            Converts the value of a substring of this instance to a String. 
-            </summary>
-            <param name="startIndex">The starting position of the substring in this instance.</param>
-            <param name="length">The length of the substring.</param>
-            <returns>A string whose value is the same as the specified substring of this instance.</returns>
-        </member>
-        <member name="M:System.Text.StringBuilder.Insert(System.Int32,System.String,System.Int32)">
-            <summary>
-            Inserts one or more copies of a specified string into this instance at the specified character position. 
-            </summary>
-            <param name="index">The position in this instance where insertion begins.</param>
-            <param name="value">The string to insert.</param>
-            <param name="count">The number of times to insert value.</param>
-            <returns>A reference to this instance after insertion has completed.</returns>
-        </member>
-        <member name="M:System.Text.StringBuilder.Insert(System.Int32,System.Char[],System.Int32,System.Int32)">
-            <summary>
-            Inserts the string representation of a specified subarray of Unicode characters into this instance at the specified character position. 
-            </summary>
-            <param name="index">The position in this instance where insertion begins.</param>
-            <param name="value">A character array.</param>
-            <param name="startIndex">The starting index within value.</param>
-            <param name="charCount">The number of characters to insert.</param>
-            <returns>A reference to this instance after the insert operation has completed.</returns>
-        </member>
-        <member name="M:System.Text.StringBuilder.Replace(System.Char,System.Char,System.Int32,System.Int32)">
-            <summary>
-            Replaces, within a substring of this instance, all occurrences of a specified character with another specified character. 
-            </summary>
-            <param name="oldChar">The character to replace. </param>
-            <param name="newChar">The character that replaces oldChar. </param>
-            <param name="startIndex">The position in this instance where the substring begins. </param>
-            <param name="count">The length of the substring. </param>
-            <returns>A reference to this instance with oldChar replaced by newChar in the range from startIndex to startIndex + count -1.</returns>
-        </member>
-        <member name="M:System.Text.StringBuilder.Replace(System.Char,System.Char)">
-            <summary>
-            Replaces all occurrences of a specified character in this instance with another specified character. 
-            </summary>
-            <param name="oldChar">The character to replace.</param>
-            <param name="newChar">The character that replaces oldChar.</param>
-            <returns>A reference to this instance with oldChar replaced by newChar.</returns>
-        </member>
-        <member name="M:System.Text.StringBuilder.Replace(System.String,System.String,System.Int32,System.Int32)">
-            <summary>
-            Replaces, within a substring of this instance, all occurrences of a specified string with another specified string. 
-            </summary>
-            <param name="oldValue">The string to replace.</param>
-            <param name="newValue">The string that replaces oldValue, or null.</param>
-            <param name="startIndex">The position in this instance where the substring begins.</param>
-            <param name="count">The length of the substring.</param>
-            <returns>A reference to this instance with all instances of oldValue replaced by newValue in the range from startIndex to startIndex + count - 1.</returns>
-        </member>
-        <member name="M:System.Text.StringBuilder.Replace(System.String,System.String)">
-            <summary>
-            Replaces all occurrences of a specified string in this instance with another specified string. 
-            </summary>
-            <param name="oldValue">The string to replace.</param>
-            <param name="newValue">The string that replaces oldValue, or null.</param>
-            <returns>A reference to this instance with all instances of oldValue replaced by newValue.</returns>
-        </member>
-        <member name="M:System.Text.StringBuilder.AppendLine(System.String)">
-            <summary>
-            Appends a copy of the specified string followed by the default line terminator to the end of the current StringBuilder object.
-            </summary>
-            <param name="str">A reference to this instance after the append operation has completed.</param>
-        </member>
-        <member name="M:System.Text.StringBuilder.AppendLine">
-            <summary>
-            Appends the default line terminator to the end of the current StringBuilder object.
-            </summary>
-            <returns>A reference to this instance after the append operation has completed.</returns>
-        </member>
-        <member name="T:System.Text.UTF8Encoding">
-            <summary>
-            Represents a UTF-8 encoding of Unicode characters.
-            </summary>
-        </member>
-        <member name="M:System.Text.UTF8Encoding.#ctor">
-            <summary>
-            Represents a UTF-8 encoding of Unicode characters.
-            </summary>
-        </member>
-        <member name="M:System.Text.UTF8Encoding.GetBytes(System.String)">
-            <summary>
-            
-            </summary>
-            <param name="s"></param>
-            <returns></returns>
-        </member>
-        <member name="M:System.Text.UTF8Encoding.GetBytes(System.String,System.Int32,System.Int32,System.Byte[],System.Int32)">
-            <summary>
-            Encodes a set of characters from the specified <see cref="T:System.String"/> into the specified byte array.
-            </summary>
-            <param name="s">The <see cref="T:System.String"/> containing the set of characters to encode.</param>
-            <param name="charIndex">The index of the first character to encode.</param>
-            <param name="charCount">The number of characters to encode.</param>
-            <param name="bytes">The byte array to contain the resulting sequence of bytes.</param>
-            <param name="byteIndex">The index at which to start writing the resulting sequence of bytes.</param>
-            <returns>The actual number of bytes written into <paramref name="bytes"/>.</returns>
-        </member>
-        <member name="M:System.Text.UTF8Encoding.GetChars(System.Byte[])">
-            <summary>
-            Decodes a sequence of bytes from the specified byte array into a set of characters.
-            </summary>
-            <param name="bytes">The byte array containing the sequence of bytes to decode.</param>
-            <returns>The actual number of characters returned.</returns>
-        </member>
-        <member name="M:System.Text.UTF8Encoding.GetChars(System.Byte[],System.Int32,System.Int32)">
-            <summary>
-            Decodes a sequence of bytes from the specified byte array into a set of characters.
-            </summary>
-            <param name="bytes">The byte array containing the sequence of bytes to decode.</param>
-            <param name="byteIndex">The index of the first byte to decode.</param>
-            <param name="byteCount">The number of bytes to decode.</param>
-            <returns>The actual number of characters returned.</returns>
-        </member>
-        <member name="M:System.Text.UTF8Encoding.GetDecoder">
-            <summary>
-            Obtains a decoder that converts a UTF-8 encoded sequence of bytes into a sequence of Unicode characters.
-            </summary>
-            <returns>A decoder that converts a UTF-8 encoded sequence of bytes into a sequence of Unicode characters.</returns>
-        </member>
         <member name="T:System.STAThreadAttribute">
             <summary>
             Indicates that the COM threading model for an application is single-threaded apartment (STA).
@@ -6756,12 +5963,6 @@
             Gets a value containing the states of the current thread.
             </summary>
             <value>One of the ThreadState values indicating the state of the current thread. The initial value is Unstarted.</value>
-        </member>
-        <member name="M:System.Threading.Thread.GetDomain">
-            <summary>
-            Returns the current domain in which the current thread is running.
-            </summary>
-            <returns>An AppDomain representing the current application domain of the running thread.</returns>
         </member>
         <member name="T:System.Threading.ThreadAbortException">
             <summary>
@@ -7337,6 +6538,7 @@
             <summary>
             Represents type declarations: class types, interface types, array types, value types, enumeration types, type parameters, generic type definitions, and open or closed constructed generic types.
             </summary>
+            <remarks>Available only in mscorlib build with support for System.Reflection.</remarks>
         </member>
         <member name="P:System.Type.DeclaringType">
             <summary>

@@ -99,3 +99,125 @@ C:\Users\The_User\source\repos\nF-ESP32-One-Wire\ESP32_OneWire\obj\Debug\Windows
 C:\Users\The_User\source\repos\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\ESP32_OneWire.bin
 C:\Users\The_User\source\repos\nF-ESP32-One-Wire\ESP32_OneWire\obj\Debug\ESP32_OneWire.pe
 C:\Users\The_User\source\repos\nF-ESP32-One-Wire\ESP32_OneWire\obj\Debug\ESP32_OneWire.pdbx
+C:\IoT Projects\Source\Repos\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\ESP32_OneWire.exe
+C:\IoT Projects\Source\Repos\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\ESP32_OneWire.exe.config
+C:\IoT Projects\Source\Repos\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\ESP32_OneWire.pdb
+C:\IoT Projects\Source\Repos\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\ESP32_OneWire.pe
+C:\IoT Projects\Source\Repos\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\ESP32_OneWire.pdbx
+C:\IoT Projects\Source\Repos\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\mscorlib.pe
+C:\IoT Projects\Source\Repos\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\nanoFramework.Devices.OneWire.pe
+C:\IoT Projects\Source\Repos\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\nanoFramework.Runtime.Events.pe
+C:\IoT Projects\Source\Repos\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\System.Math.pe
+C:\IoT Projects\Source\Repos\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\Windows.Devices.Gpio.pe
+C:\IoT Projects\Source\Repos\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\mscorlib.pdbx
+C:\IoT Projects\Source\Repos\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\nanoFramework.Devices.OneWire.pdbx
+C:\IoT Projects\Source\Repos\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\nanoFramework.Runtime.Events.pdbx
+C:\IoT Projects\Source\Repos\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\System.Math.pdbx
+C:\IoT Projects\Source\Repos\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\Windows.Devices.Gpio.pdbx
+C:\IoT Projects\Source\Repos\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\mscorlib.dll
+C:\IoT Projects\Source\Repos\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\nanoFramework.Devices.OneWire.dll
+C:\IoT Projects\Source\Repos\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\nanoFramework.Runtime.Events.dll
+C:\IoT Projects\Source\Repos\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\System.Math.dll
+C:\IoT Projects\Source\Repos\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\Windows.Devices.Gpio.dll
+C:\IoT Projects\Source\Repos\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\mscorlib.pdb
+C:\IoT Projects\Source\Repos\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\mscorlib.xml
+C:\IoT Projects\Source\Repos\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\nanoFramework.Devices.OneWire.pdb
+C:\IoT Projects\Source\Repos\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\nanoFramework.Devices.OneWire.xml
+C:\IoT Projects\Source\Repos\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\nanoFramework.Runtime.Events.pdb
+C:\IoT Projects\Source\Repos\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\nanoFramework.Runtime.Events.xml
+C:\IoT Projects\Source\Repos\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\System.Math.pdb
+C:\IoT Projects\Source\Repos\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\System.Math.xml
+C:\IoT Projects\Source\Repos\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\Windows.Devices.Gpio.pdb
+C:\IoT Projects\Source\Repos\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\Windows.Devices.Gpio.xml
+C:\IoT Projects\Source\Repos\nF-ESP32-One-Wire\ESP32_OneWire\obj\Debug\ESP32_OneWire.nfprojAssemblyReference.cache
+C:\IoT Projects\Source\Repos\nF-ESP32-One-Wire\ESP32_OneWire\obj\Debug\ESP32_OneWire.nfproj.CoreCompileInputs.cache
+C:\IoT Projects\Source\Repos\nF-ESP32-One-Wire\ESP32_OneWire\obj\Debug\ESP32_OneWire.nfproj.CopyComplete
+C:\IoT Projects\Source\Repos\nF-ESP32-One-Wire\ESP32_OneWire\obj\Debug\ESP32_OneWire.exe
+C:\IoT Projects\Source\Repos\nF-ESP32-One-Wire\ESP32_OneWire\obj\Debug\ESP32_OneWire.pdb
+C:\IoT Projects\Source\Repos\nF-ESP32-One-Wire\ESP32_OneWire\obj\Debug\mscorlib.dll
+C:\IoT Projects\Source\Repos\nF-ESP32-One-Wire\ESP32_OneWire\obj\Debug\nanoFramework.Devices.OneWire.dll
+C:\IoT Projects\Source\Repos\nF-ESP32-One-Wire\ESP32_OneWire\obj\Debug\nanoFramework.Runtime.Events.dll
+C:\IoT Projects\Source\Repos\nF-ESP32-One-Wire\ESP32_OneWire\obj\Debug\System.Math.dll
+C:\IoT Projects\Source\Repos\nF-ESP32-One-Wire\ESP32_OneWire\obj\Debug\Windows.Devices.Gpio.dll
+C:\IoT Projects\Source\Repos\nF-ESP32-One-Wire\ESP32_OneWire\obj\Debug\mscorlib.pdb
+C:\IoT Projects\Source\Repos\nF-ESP32-One-Wire\ESP32_OneWire\obj\Debug\mscorlib.xml
+C:\IoT Projects\Source\Repos\nF-ESP32-One-Wire\ESP32_OneWire\obj\Debug\nanoFramework.Devices.OneWire.pdb
+C:\IoT Projects\Source\Repos\nF-ESP32-One-Wire\ESP32_OneWire\obj\Debug\nanoFramework.Devices.OneWire.xml
+C:\IoT Projects\Source\Repos\nF-ESP32-One-Wire\ESP32_OneWire\obj\Debug\nanoFramework.Runtime.Events.pdb
+C:\IoT Projects\Source\Repos\nF-ESP32-One-Wire\ESP32_OneWire\obj\Debug\nanoFramework.Runtime.Events.xml
+C:\IoT Projects\Source\Repos\nF-ESP32-One-Wire\ESP32_OneWire\obj\Debug\System.Math.pdb
+C:\IoT Projects\Source\Repos\nF-ESP32-One-Wire\ESP32_OneWire\obj\Debug\System.Math.xml
+C:\IoT Projects\Source\Repos\nF-ESP32-One-Wire\ESP32_OneWire\obj\Debug\Windows.Devices.Gpio.pdb
+C:\IoT Projects\Source\Repos\nF-ESP32-One-Wire\ESP32_OneWire\obj\Debug\Windows.Devices.Gpio.xml
+C:\IoT Projects\Source\Repos\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\nanoFramework.System.Text.pe
+C:\IoT Projects\Source\Repos\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\nanoFramework.System.Text.pdbx
+C:\IoT Projects\Source\Repos\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\nanoFramework.System.Text.dll
+C:\IoT Projects\Source\Repos\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\nanoFramework.System.Text.pdb
+C:\IoT Projects\Source\Repos\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\nanoFramework.System.Text.xml
+C:\IoT Projects\Source\Repos\nF-ESP32-One-Wire\ESP32_OneWire\obj\Debug\nanoFramework.System.Text.dll
+C:\IoT Projects\Source\Repos\nF-ESP32-One-Wire\ESP32_OneWire\obj\Debug\nanoFramework.System.Text.pdb
+C:\IoT Projects\Source\Repos\nF-ESP32-One-Wire\ESP32_OneWire\obj\Debug\nanoFramework.System.Text.xml
+C:\IoT Projects\Source\Repos\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\ESP32_OneWire.bin
+C:\IoT Projects\Source\Repos\nF-ESP32-One-Wire\ESP32_OneWire\obj\Debug\ESP32_OneWire.pe
+C:\IoT Projects\Source\Repos\nF-ESP32-One-Wire\ESP32_OneWire\obj\Debug\ESP32_OneWire.pdbx
+C:\Git_Repositories\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\ESP32_OneWire.exe
+C:\Git_Repositories\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\ESP32_OneWire.pdbx
+C:\Git_Repositories\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\ESP32_OneWire.exe.config
+C:\Git_Repositories\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\ESP32_OneWire.pdb
+C:\Git_Repositories\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\ESP32_OneWire.pe
+C:\Git_Repositories\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\mscorlib.pe
+C:\Git_Repositories\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\nanoFramework.Devices.OneWire.pe
+C:\Git_Repositories\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\nanoFramework.Runtime.Events.pe
+C:\Git_Repositories\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\nanoFramework.System.Text.pe
+C:\Git_Repositories\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\System.Math.pe
+C:\Git_Repositories\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\Windows.Devices.Gpio.pe
+C:\Git_Repositories\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\mscorlib.pdbx
+C:\Git_Repositories\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\nanoFramework.Devices.OneWire.pdbx
+C:\Git_Repositories\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\nanoFramework.Runtime.Events.pdbx
+C:\Git_Repositories\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\nanoFramework.System.Text.pdbx
+C:\Git_Repositories\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\System.Math.pdbx
+C:\Git_Repositories\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\Windows.Devices.Gpio.pdbx
+C:\Git_Repositories\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\mscorlib.dll
+C:\Git_Repositories\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\nanoFramework.Devices.OneWire.dll
+C:\Git_Repositories\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\nanoFramework.Runtime.Events.dll
+C:\Git_Repositories\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\nanoFramework.System.Text.dll
+C:\Git_Repositories\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\System.Math.dll
+C:\Git_Repositories\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\Windows.Devices.Gpio.dll
+C:\Git_Repositories\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\mscorlib.pdb
+C:\Git_Repositories\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\mscorlib.xml
+C:\Git_Repositories\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\nanoFramework.Devices.OneWire.pdb
+C:\Git_Repositories\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\nanoFramework.Devices.OneWire.xml
+C:\Git_Repositories\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\nanoFramework.Runtime.Events.pdb
+C:\Git_Repositories\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\nanoFramework.Runtime.Events.xml
+C:\Git_Repositories\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\nanoFramework.System.Text.pdb
+C:\Git_Repositories\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\nanoFramework.System.Text.xml
+C:\Git_Repositories\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\System.Math.pdb
+C:\Git_Repositories\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\System.Math.xml
+C:\Git_Repositories\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\Windows.Devices.Gpio.pdb
+C:\Git_Repositories\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\Windows.Devices.Gpio.xml
+C:\Git_Repositories\nF-ESP32-One-Wire\ESP32_OneWire\obj\Debug\ESP32_OneWire.nfprojAssemblyReference.cache
+C:\Git_Repositories\nF-ESP32-One-Wire\ESP32_OneWire\obj\Debug\ESP32_OneWire.nfproj.CoreCompileInputs.cache
+C:\Git_Repositories\nF-ESP32-One-Wire\ESP32_OneWire\obj\Debug\ESP32_OneWire.nfproj.CopyComplete
+C:\Git_Repositories\nF-ESP32-One-Wire\ESP32_OneWire\obj\Debug\ESP32_OneWire.exe
+C:\Git_Repositories\nF-ESP32-One-Wire\ESP32_OneWire\obj\Debug\ESP32_OneWire.pdb
+C:\Git_Repositories\nF-ESP32-One-Wire\ESP32_OneWire\obj\Debug\mscorlib.dll
+C:\Git_Repositories\nF-ESP32-One-Wire\ESP32_OneWire\obj\Debug\nanoFramework.Devices.OneWire.dll
+C:\Git_Repositories\nF-ESP32-One-Wire\ESP32_OneWire\obj\Debug\nanoFramework.Runtime.Events.dll
+C:\Git_Repositories\nF-ESP32-One-Wire\ESP32_OneWire\obj\Debug\nanoFramework.System.Text.dll
+C:\Git_Repositories\nF-ESP32-One-Wire\ESP32_OneWire\obj\Debug\System.Math.dll
+C:\Git_Repositories\nF-ESP32-One-Wire\ESP32_OneWire\obj\Debug\Windows.Devices.Gpio.dll
+C:\Git_Repositories\nF-ESP32-One-Wire\ESP32_OneWire\obj\Debug\mscorlib.pdb
+C:\Git_Repositories\nF-ESP32-One-Wire\ESP32_OneWire\obj\Debug\mscorlib.xml
+C:\Git_Repositories\nF-ESP32-One-Wire\ESP32_OneWire\obj\Debug\nanoFramework.Devices.OneWire.pdb
+C:\Git_Repositories\nF-ESP32-One-Wire\ESP32_OneWire\obj\Debug\nanoFramework.Devices.OneWire.xml
+C:\Git_Repositories\nF-ESP32-One-Wire\ESP32_OneWire\obj\Debug\nanoFramework.Runtime.Events.pdb
+C:\Git_Repositories\nF-ESP32-One-Wire\ESP32_OneWire\obj\Debug\nanoFramework.Runtime.Events.xml
+C:\Git_Repositories\nF-ESP32-One-Wire\ESP32_OneWire\obj\Debug\nanoFramework.System.Text.pdb
+C:\Git_Repositories\nF-ESP32-One-Wire\ESP32_OneWire\obj\Debug\nanoFramework.System.Text.xml
+C:\Git_Repositories\nF-ESP32-One-Wire\ESP32_OneWire\obj\Debug\System.Math.pdb
+C:\Git_Repositories\nF-ESP32-One-Wire\ESP32_OneWire\obj\Debug\System.Math.xml
+C:\Git_Repositories\nF-ESP32-One-Wire\ESP32_OneWire\obj\Debug\Windows.Devices.Gpio.pdb
+C:\Git_Repositories\nF-ESP32-One-Wire\ESP32_OneWire\obj\Debug\Windows.Devices.Gpio.xml
+C:\Git_Repositories\nF-ESP32-One-Wire\ESP32_OneWire\bin\Debug\ESP32_OneWire.bin
+C:\Git_Repositories\nF-ESP32-One-Wire\ESP32_OneWire\obj\Debug\ESP32_OneWire.pe
+C:\Git_Repositories\nF-ESP32-One-Wire\ESP32_OneWire\obj\Debug\ESP32_OneWire.pdbx
