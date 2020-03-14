@@ -24,7 +24,7 @@ namespace nanoFramework.Companion
         /// <summary>
         /// Initialize the sensor
         /// </summary>
-        void Initialize();
+        int Initialize();
         /// <summary>
         /// Prepare to read sensor
         /// </summary>

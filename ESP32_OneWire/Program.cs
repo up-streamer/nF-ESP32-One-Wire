@@ -19,21 +19,24 @@ namespace OneWire_v3
                                     true, /* Multidrop, network*/
                                     3 /*3 decimal places is enough for us while reading temperature changes*/
                                     );
-          
+
             string devAddrStr = "";//store the device address as string...
 
-            ds18b20.Initialize(); //Initialize sensors / search for 18B20 devices
-            
-            if (ds18b20.AddressNet.Length > 0)
+            int result = ds18b20.Initialize(); //Initialize sensors / search for 18B20 devices
+
+            if (result == 0)
+            {
+                Console.WriteLine("No device found.");
+            }
+            else
             {
                 Console.WriteLine("AdressNet SIZE = " + ds18b20.AddressNet.Length.ToString());
-                for (int i = 0; i < ds18b20.AddressNet.Length; i++ )
+                for (int i = 0; i < ds18b20.AddressNet.Length; i++)
                 {
                     foreach (var addrByte in ds18b20.AddressNet[i]) devAddrStr += addrByte.ToString("X2");
                     Console.WriteLine("18b20-" + i.ToString("X2") + " " + devAddrStr);
                     devAddrStr = "";
                 }
-
             }
 
             int loopRead = 20;
@@ -51,8 +54,8 @@ namespace OneWire_v3
                     ds18b20.PrepareToRead();
                     ds18b20.Read();
                     Console.WriteLine("DS18B20[" + devAddrStr + "] Sensor reading in One-Shot-mode; T=" + ds18b20.TemperatureInCelcius.ToString() + " C"); //"f2" two decimal point format.
-                    
-                    Thread.Sleep(4000);  
+
+                    Thread.Sleep(4000);
                 }
                 Console.WriteLine("LoopRead " + loopRead);
                 loopRead--;

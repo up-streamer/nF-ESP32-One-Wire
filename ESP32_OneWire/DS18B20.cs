@@ -194,7 +194,7 @@ namespace nanoFramework.Companion.Drivers.Sensors
        /// It should have valid 64-bit value.
        /// If in Multidrop mode will keep seaching until find last device, save all in AddressNet array.
        /// </summary>
-       public override void Initialize()
+       public override int Initialize()
        {
            Found = 0;
            //ArrayList allDevices;
@@ -258,7 +258,7 @@ namespace nanoFramework.Companion.Drivers.Sensors
                }
 
            }
-           if (Found == 0) throw new Exception();
+            return Found;
        }
        /// <summary>
        /// Prepare sensor to read the data
