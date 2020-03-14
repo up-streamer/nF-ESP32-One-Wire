@@ -191,7 +191,7 @@ namespace nanoFramework.Companion.Drivers.Sensors
        /// It will check for existence of a 1-wire device. If no address was provided, then the
        /// 1-wire bus will be searched and the first device that matches the family code will be latched on to.
        /// Developer should check for successful initialization by checking the value returned. 
-       /// It should be bigger than 0.
+       /// It must be bigger than 0.
        /// If in Multidrop mode will keep seaching until find last device, saving all in AddressNet array.
        /// </summary>
        public override int Initialize()
