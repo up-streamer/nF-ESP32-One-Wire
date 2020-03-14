@@ -190,9 +190,9 @@ namespace nanoFramework.Companion.Drivers.Sensors
        /// Initialize the sensor. This step will perform a reset of the 1-wire bus.
        /// It will check for existence of a 1-wire device. If no address was provided, then the
        /// 1-wire bus will be searched and the first device that matches the family code will be latched on to.
-       /// Developer should check for successful initialization by checking the Address property. 
-       /// It should have valid 64-bit value.
-       /// If in Multidrop mode will keep seaching until find last device, save all in AddressNet array.
+       /// Developer should check for successful initialization by checking the value returned. 
+       /// It should be bigger than 0.
+       /// If in Multidrop mode will keep seaching until find last device, saving all in AddressNet array.
        /// </summary>
        public override int Initialize()
        {
@@ -206,10 +206,6 @@ namespace nanoFramework.Companion.Drivers.Sensors
                //found the device
                if (Multidrop)
                {
-                  // _oneWire.FindFirstDevice(true, false);
-                   //allDevices = _oneWire.FindAllDevices();
-
-                   //Console.WriteLine("allDevices Count = " + allDevices.Count.ToString());
                    if (_oneWire.FindFirstDevice(false, false))
                    {
                        do
