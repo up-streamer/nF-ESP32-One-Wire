@@ -400,7 +400,9 @@ namespace nanoFramework.Companion.Drivers.Sensors
            _oneWire.WriteByte((byte)tempLoAlarm);
            _oneWire.WriteByte((byte)(resolution << 5));
 
-           _oneWire.TouchReset();
+            // Save confuguration permanently on device's EEPROM
+            verify = _oneWire.WriteByte(COPY_SCRATCHPAD);
+            _oneWire.TouchReset();
 
            return true;
        }
