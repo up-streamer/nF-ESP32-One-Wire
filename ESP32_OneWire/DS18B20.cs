@@ -264,7 +264,7 @@ namespace nanoFramework.Companion.Drivers.Sensors
        /// </summary>
        public override void PrepareToRead()
        {
-           if (Address != null && Address.Length == 8 && Address[0] == FAMILY_CODE)
+           if ((Address != null || Found != 0 ) && Address.Length == 8 && Address[0] == FAMILY_CODE)
            {
                _oneWire.TouchReset();
                //first address all devices
