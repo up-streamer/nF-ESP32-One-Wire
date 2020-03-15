@@ -186,7 +186,7 @@ namespace nanoFramework.Companion
         /// <summary>
         /// Write Configuration to sensor
         /// </summary>
-        public abstract bool ConfigurationWrite();
+        public abstract bool ConfigurationWrite(bool save);
         #endregion
 
     }

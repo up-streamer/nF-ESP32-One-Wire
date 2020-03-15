@@ -66,6 +66,6 @@ namespace nanoFramework.Companion
         /// <summary>
         /// Write Configuration to sensor
         /// </summary>
-        bool ConfigurationWrite();
+        bool ConfigurationWrite(bool save);
     }
 }

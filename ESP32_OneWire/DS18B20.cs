@@ -365,15 +365,15 @@ namespace nanoFramework.Companion.Drivers.Sensors
                TempLoAlarm = (sbyte)_oneWire.ReadByte();
                int configReg = _oneWire.ReadByte();
 
-               if (_oneWire.TouchReset())
-               {
-                   Resolution = (configReg >> 5);
-               }
-               else
-               {
-                   Resolution = 0xEE;
-               };
-           }
+                if (_oneWire.TouchReset())
+                {
+                    Resolution = (configReg >> 5);
+                }
+                else
+                {
+                    Resolution = 0xEE;
+                };
+            }
            return Resolution != ERROR_TEMPERATURE;
        }
        /// <summary>
@@ -382,7 +382,7 @@ namespace nanoFramework.Companion.Drivers.Sensors
        /// resolution.
        /// The unchanged registers will be overwritten.
        /// </summary>
-       public override bool ConfigurationWrite()
+       public override bool ConfigurationWrite(bool save)
        {
            _oneWire.TouchReset();
            //now write command and ROM at once
@@ -401,7 +401,10 @@ namespace nanoFramework.Companion.Drivers.Sensors
            _oneWire.WriteByte((byte)(resolution << 5));
 
             // Save confuguration permanently on device's EEPROM
-            verify = _oneWire.WriteByte(COPY_SCRATCHPAD);
+            if (save)
+            {
+                verify = _oneWire.WriteByte(COPY_SCRATCHPAD);
+            };
             _oneWire.TouchReset();
 
            return true;
