@@ -382,7 +382,7 @@ namespace nanoFramework.Companion.Drivers.Sensors
        /// resolution.
        /// The unchanged registers will be overwritten.
        /// </summary>
-       public override bool ConfigurationWrite(bool save)
+       public override bool ConfigurationWrite(bool save = false)
        {
            _oneWire.TouchReset();
            //now write command and ROM at once
