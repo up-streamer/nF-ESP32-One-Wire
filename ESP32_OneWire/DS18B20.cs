@@ -71,10 +71,14 @@ namespace nanoFramework.Companion.Drivers.Sensors
        /// Command to read scratchpad register
        /// </summary>
        private readonly byte READ_SCRATCHPAD = 0xBE;
-       /// <summary>
-       /// Error value of temperature
-       /// </summary>
-       private const float ERROR_TEMPERATURE = -999.99F;
+        /// <summary>
+        /// Command to alarm search
+        /// </summary>
+        private readonly byte ALARM_SEARCH = 0xEC;
+        /// <summary>
+        /// Error value of temperature
+        /// </summary>
+        private const float ERROR_TEMPERATURE = -999.99F;
        #endregion
 
        #region Properties
@@ -182,7 +186,6 @@ namespace nanoFramework.Companion.Drivers.Sensors
        {
            Address = null;
        }
-
        #endregion
 
        #region Core Methods
@@ -335,15 +338,17 @@ namespace nanoFramework.Companion.Drivers.Sensors
            _oneWire.TouchReset();
            TemperatureInCelcius = ERROR_TEMPERATURE;
        }
+        #endregion
 
-       /// <summary>
-       /// Read sensor Configuration and
-       /// Write on Resolution, TempHiAlarm and TempLoAlarm properties.
-       /// Returns false if error during reading sensor.
-       /// Write 0xEE (238) to a property if
-       /// error during property handle.
-       /// </summary>
-       public override bool ConfigurationRead()
+        #region Configuration Methods
+        /// <summary>
+        /// Read sensor Configuration and
+        /// Write on Resolution, TempHiAlarm and TempLoAlarm properties.
+        /// Returns false if error during reading sensor.
+        /// Write 0xEE (238) to a property if
+        /// error during property handle.
+        /// </summary>
+        public override bool ConfigurationRead()
        {
            bool _restore = false;
            if (Address != null && Address.Length == 8 && Address[0] == FAMILY_CODE)
@@ -420,11 +425,28 @@ namespace nanoFramework.Companion.Drivers.Sensors
        {
            return true;
        }
+
+        /// <summary>
+        /// Search for alarm condition.
+        /// Save in AddressNet the list of devices
+        /// under alarm condition.
+        /// </summary>
+        /// <returns>bool</returns>
+        public override bool SearchForAlarmCondition()
+        {
+            _oneWire.TouchReset();
+            _oneWire.WriteByte(SKIP_ROM); 
+            var verify = _oneWire.WriteByte(ALARM_SEARCH); //Alarm seach command
+            Initialize(); //Save the device address in alarm
+
+            return true;
+        }
+
        /// <summary>
        /// Let the world know whether the sensor value has changed or not
        /// </summary>
        /// <returns>bool</returns>
-       public override bool HasSensorValueChanged()
+        public override bool HasSensorValueChanged()
        {
            float previousTemperature = TemperatureInCelcius;
 
