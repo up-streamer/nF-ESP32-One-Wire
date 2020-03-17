@@ -45,6 +45,8 @@ namespace OneWire_v3
 
                 while (loopRead > 0)
                 {
+                    Console.WriteLine("LoopRead " + loopRead);
+
                     for (int index = 0; index < ds18b20.Found; index++)
                     {
                         //Select the device
@@ -55,14 +57,14 @@ namespace OneWire_v3
                         //Read Temperature
                         ds18b20.PrepareToRead();
                         ds18b20.Read();
-                        Console.WriteLine("DS18B20[" + devAddrStr + "] Sensor reading in One-Shot-mode; T=" + ds18b20.TemperatureInCelcius.ToString() + " C"); //"f2" two decimal point format.
-
-                        Thread.Sleep(4000);
+                        Console.WriteLine("DS18B20[" + devAddrStr + "] Sensor reading in One-Shot-mode; T = " + ds18b20.TemperatureInCelcius.ToString() + " C"); //"f2" two decimal point format.
                     }
-                    Console.WriteLine("LoopRead " + loopRead);
+
+                    Console.WriteLine("");
                     loopRead--;
                 }
             }
+
 
             void notFound()
             {
