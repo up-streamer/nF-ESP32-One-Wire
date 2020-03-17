@@ -26,7 +26,7 @@ namespace OneWire_v3
 
             if (result == 0)
             {
-                Console.WriteLine("No device found.");
+                notFound();
             }
             else
             {
@@ -60,6 +60,13 @@ namespace OneWire_v3
                 Console.WriteLine("LoopRead " + loopRead);
                 loopRead--;
             }
+
+            void notFound()
+            {
+                Console.WriteLine("****************");
+                Console.WriteLine("No device found.");
+                Console.WriteLine("****************");
+            };
             #region Other Examples
             //OneWireController oneWire = new OneWireController();
 
