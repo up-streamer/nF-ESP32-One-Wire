@@ -22,13 +22,7 @@ namespace OneWire_v3
 
             string devAddrStr = "";//store the device address as string...
 
-            int result = ds18b20.Initialize(); //Initialize sensors / search for 18B20 devices
-
-            if (result == 0)
-            {
-                notFound();
-            }
-            else
+            if (ds18b20.Initialize())    //Initialize sensors / search for 18B20 devices
             {
                 Console.WriteLine("AdressNet SIZE = " + ds18b20.AddressNet.Length.ToString());
                 for (int i = 0; i < ds18b20.AddressNet.Length; i++)
@@ -37,28 +31,37 @@ namespace OneWire_v3
                     Console.WriteLine("18b20-" + i.ToString("X2") + " " + devAddrStr);
                     devAddrStr = "";
                 }
+
+                loopReadAll();
+            }
+            else
+            {
+                notFound();
             }
 
-            int loopRead = 20;
-
-            while (loopRead > 0)
+            void loopReadAll()
             {
-                for (int index = 0; index < ds18b20.AddressNet.Length; index++)
+                int loopRead = 20;
+
+                while (loopRead > 0)
                 {
-                    //Select the device
-                    ds18b20.Address = ds18b20.AddressNet[index];
-                    devAddrStr = "";
-                    foreach (var addrByte in ds18b20.AddressNet[index]) devAddrStr += addrByte.ToString("X2");
+                    for (int index = 0; index < ds18b20.AddressNet.Length; index++)
+                    {
+                        //Select the device
+                        ds18b20.Address = ds18b20.AddressNet[index];
+                        devAddrStr = "";
+                        foreach (var addrByte in ds18b20.AddressNet[index]) devAddrStr += addrByte.ToString("X2");
 
-                    //Read Temperature
-                    ds18b20.PrepareToRead();
-                    ds18b20.Read();
-                    Console.WriteLine("DS18B20[" + devAddrStr + "] Sensor reading in One-Shot-mode; T=" + ds18b20.TemperatureInCelcius.ToString() + " C"); //"f2" two decimal point format.
+                        //Read Temperature
+                        ds18b20.PrepareToRead();
+                        ds18b20.Read();
+                        Console.WriteLine("DS18B20[" + devAddrStr + "] Sensor reading in One-Shot-mode; T=" + ds18b20.TemperatureInCelcius.ToString() + " C"); //"f2" two decimal point format.
 
-                    Thread.Sleep(4000);
+                        Thread.Sleep(4000);
+                    }
+                    Console.WriteLine("LoopRead " + loopRead);
+                    loopRead--;
                 }
-                Console.WriteLine("LoopRead " + loopRead);
-                loopRead--;
             }
 
             void notFound()

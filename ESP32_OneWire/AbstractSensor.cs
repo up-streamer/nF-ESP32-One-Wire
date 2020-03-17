@@ -165,7 +165,7 @@ namespace nanoFramework.Companion
         /// <summary>
         /// Initialize the sensor
         /// </summary>
-        public abstract int Initialize();
+        public abstract bool Initialize();
         /// <summary>
         /// Prepare sensor for reading value
         /// </summary>
