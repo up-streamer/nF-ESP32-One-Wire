@@ -24,14 +24,14 @@ namespace OneWire_v3
 
             if (ds18b20.Initialize())    //Initialize sensors / search for 18B20 devices
             {
-                Console.WriteLine("AdressNet SIZE = " + ds18b20.AddressNet.Length.ToString());
-                for (int i = 0; i < ds18b20.AddressNet.Length; i++)
+                Console.WriteLine("Devices found = " + ds18b20.Found);
+                for (int i = 0; i < ds18b20.Found; i++)
                 {
                     foreach (var addrByte in ds18b20.AddressNet[i]) devAddrStr += addrByte.ToString("X2");
                     Console.WriteLine("18b20-" + i.ToString("X2") + " " + devAddrStr);
                     devAddrStr = "";
                 }
-
+                Console.WriteLine("");
                 loopReadAll();
             }
             else
@@ -45,7 +45,7 @@ namespace OneWire_v3
 
                 while (loopRead > 0)
                 {
-                    for (int index = 0; index < ds18b20.AddressNet.Length; index++)
+                    for (int index = 0; index < ds18b20.Found; index++)
                     {
                         //Select the device
                         ds18b20.Address = ds18b20.AddressNet[index];
