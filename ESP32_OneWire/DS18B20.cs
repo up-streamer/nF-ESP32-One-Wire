@@ -222,7 +222,6 @@ namespace nanoFramework.Companion.Drivers.Sensors
                                allDevices.Add(Address);
                                //if (Found == 6) { break; } //Temp fix during test endless loop
                            }
-                           Thread.Sleep(1000);
                        } while (_oneWire.FindNextDevice(false, false));//keep searching until we get one
                    }
                    
