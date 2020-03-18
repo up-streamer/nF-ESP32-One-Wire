@@ -202,7 +202,7 @@ namespace nanoFramework.Companion.Drivers.Sensors
            Found = 0;
            //ArrayList allDevices;
            ArrayList allDevices = new ArrayList();
-          while(_oneWire.TouchReset() == false) { Thread.Sleep(1000); }
+           while(_oneWire.TouchReset() == false) { Thread.Sleep(1000); }
           
            if (Address == null) //search for a device with the required family code
            {

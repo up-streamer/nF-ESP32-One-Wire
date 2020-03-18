@@ -25,16 +25,20 @@ namespace OneWire_v3
 
             if (ds18b20.Initialize())    //Initialize sensors / search for 18B20 devices
             {
-                Console.WriteLine("");
+               Console.WriteLine("");
                Console.WriteLine("Devices found = " + ds18b20.Found);
                 for (int i = 0; i < ds18b20.Found; i++)
                 {
+                    ds18b20.Address = ds18b20.AddressNet[i];
+                    setAlarmSetPoints(); // Set same setpoint for selected device
+
                     foreach (var addrByte in ds18b20.AddressNet[i]) devAddrStr += addrByte.ToString("X2");
                     Console.WriteLine("18b20-" + i.ToString("X2") + " " + devAddrStr);
                     devAddrStr = "";
                 }
                 Console.WriteLine("");
                 loopReadAll();
+                alarmSearch();
             }
             else
             {
@@ -67,12 +71,62 @@ namespace OneWire_v3
                 }
             }
 
+            // Set alarm setpoint for selected device
+            void setAlarmSetPoints()
+            {
+                    ds18b20.Reset();
+                    ds18b20.TempHiAlarm = -10;
+                    ds18b20.TempLoAlarm = 25;
+                    ds18b20.ConfigurationWrite(false); //Write configuration on ScratchPad,
+                                                       //If true, save it on EEPROM too.
+            }
+
+            void alarmSearch()
+            {
+                int loopRead = 40;
+
+                Console.WriteLine("LoopRead " + loopRead);
+                if (ds18b20.SearchForAlarmCondition()) // Update .AddressNet[] with devices under alarm
+                {
+                    while (loopRead > 0)
+                    {
+                        for (int index = 0; index < ds18b20.Found; index++)
+                        {
+                            //Select the device
+                            ds18b20.Address = ds18b20.AddressNet[index];
+
+                            ds18b20.ConfigurationRead(); //Read alarm setpoint.
+                            Console.WriteLine("Alarm Setpoints:");
+                            Console.WriteLine("Hi alarm =" + ds18b20.TempHiAlarm + " C");
+                            Console.WriteLine("Lo alarm =" + ds18b20.TempLoAlarm + " C");
+
+                            devAddrStr = "";
+                            foreach (var addrByte in ds18b20.AddressNet[index]) devAddrStr += addrByte.ToString("X2");
+                            //Read Temperature on selected device
+                            ds18b20.Read();
+                            Console.WriteLine("DS18B20[" + devAddrStr + "] Sensor reading in One-Shot-mode; T = " + ds18b20.TemperatureInCelcius.ToString() + " C");
+                        }
+                    }
+                    Console.WriteLine("");
+                    loopRead--;
+                }
+                else
+                {
+                    notFound();
+                    Console.WriteLine("****In Alarm*****");
+
+                }; 
+
+
+
+            }
 
             void notFound()
             {
-                Console.WriteLine("****************");
-                Console.WriteLine("No device found.");
-                Console.WriteLine("****************");
+
+                Console.WriteLine("*****************");
+                Console.WriteLine("No devices found.");
+                Console.WriteLine("*****************");
             };
             #region Other Examples
             //OneWireController oneWire = new OneWireController();
