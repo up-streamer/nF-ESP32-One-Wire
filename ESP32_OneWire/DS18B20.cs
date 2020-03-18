@@ -439,7 +439,8 @@ namespace nanoFramework.Companion.Drivers.Sensors
             var verify = _oneWire.WriteByte(ALARM_SEARCH); //Alarm seach command
             Initialize(); //Save the device address in alarm
 
-            return true;
+            if (Initialize()) { return true; }
+            return false;
         }
 
        /// <summary>
