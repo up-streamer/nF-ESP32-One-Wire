@@ -41,11 +41,12 @@ namespace OneWire_v3
 
             void loopReadAll()
             {
-                int loopRead = 20;
+                int loopRead = 40;
 
                 while (loopRead > 0)
                 {
                     Console.WriteLine("LoopRead " + loopRead);
+                    ds18b20.PrepareToRead(); // Update temp. value in all devices
 
                     for (int index = 0; index < ds18b20.Found; index++)
                     {
@@ -54,8 +55,7 @@ namespace OneWire_v3
                         devAddrStr = "";
                         foreach (var addrByte in ds18b20.AddressNet[index]) devAddrStr += addrByte.ToString("X2");
 
-                        //Read Temperature
-                        ds18b20.PrepareToRead();
+                        //Read Temperature on selected device
                         ds18b20.Read();
                         Console.WriteLine("DS18B20[" + devAddrStr + "] Sensor reading in One-Shot-mode; T = " + ds18b20.TemperatureInCelcius.ToString() + " C"); //"f2" two decimal point format.
                     }
