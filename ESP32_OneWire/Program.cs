@@ -10,6 +10,7 @@ namespace OneWire_v3
     {
         public static void Main()
         {
+            Console.WriteLine("");
             Console.WriteLine("** nanoFramework OneWire ESP32 DEV KITV1 Sample! **");
 
             OneWireController oneWire = new OneWireController();
@@ -24,7 +25,8 @@ namespace OneWire_v3
 
             if (ds18b20.Initialize())    //Initialize sensors / search for 18B20 devices
             {
-                Console.WriteLine("Devices found = " + ds18b20.Found);
+                Console.WriteLine("");
+               Console.WriteLine("Devices found = " + ds18b20.Found);
                 for (int i = 0; i < ds18b20.Found; i++)
                 {
                     foreach (var addrByte in ds18b20.AddressNet[i]) devAddrStr += addrByte.ToString("X2");
