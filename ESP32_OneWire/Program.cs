@@ -15,15 +15,15 @@ namespace OneWire_v3
 
             OneWireController oneWire = new OneWireController();
 
-            DS18B20 ds18b20 = new DS18B20(oneWire,/* The 1-wire bus*/
-                                    null, /*Let this driver find out a DS18B20 on the bus*/
-                                    true, /* Multidrop, network*/
-                                    3 /*3 decimal places is enough for us while reading temperature changes*/
+            DS18B20 ds18b20 = new DS18B20(oneWire,  /* The 1-wire bus*/
+                                    null,           /*Let this driver find out a DS18B20 on the bus*/
+                                    true,           /* Multidrop, network*/
+                                    3       /* 3 decimal places is enough for us while reading temperature changes*/
                                     );
 
             string devAddrStr = "";//store the device address as string...
 
-            if (ds18b20.Initialize())    //Initialize sensors / search for 18B20 devices
+            if (ds18b20.Initialize())    //Initialize sensors | search for 18B20 devices
             {
                Console.WriteLine("");
                Console.WriteLine("Devices found = " + ds18b20.Found);
@@ -63,7 +63,7 @@ namespace OneWire_v3
 
                         //Read Temperature on selected device
                         ds18b20.Read();
-                        Console.WriteLine("DS18B20[" + devAddrStr + "] Sensor reading in One-Shot-mode; T = " + ds18b20.TemperatureInCelcius.ToString() + " C"); //"f2" two decimal point format.
+                        Console.WriteLine("DS18B20[" + devAddrStr + "] Sensor reading in One-Shot-mode; T = " + ds18b20.TemperatureInCelcius.ToString("f2") + " C"); //"f2" two decimal point format.
                     }
 
                     Console.WriteLine("");
@@ -74,9 +74,8 @@ namespace OneWire_v3
             // Set alarm setpoint for selected device
             void setAlarmSetPoints()
             {
-                    ds18b20.Reset();
-                    ds18b20.TempHiAlarm = -10;
-                    ds18b20.TempLoAlarm = 25;
+                    ds18b20.TempHiAlarm = 21;
+                    ds18b20.TempLoAlarm = -10;
                     ds18b20.ConfigurationWrite(false); //Write configuration on ScratchPad,
                                                        //If true, save it on EEPROM too.
             }
@@ -128,6 +127,7 @@ namespace OneWire_v3
                 Console.WriteLine("No devices found.");
                 Console.WriteLine("*****************");
             };
+
             #region Other Examples
             //OneWireController oneWire = new OneWireController();
 
