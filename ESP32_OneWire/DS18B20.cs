@@ -87,17 +87,19 @@ namespace nanoFramework.Companion.Drivers.Sensors
 
         #region Properties
         /// <summary>
-        /// The 8-byte address of this device (since there could be more than one such devices on the bus)
+        /// The 8-byte address of selected device 
+        /// (since there could be more than one such devices on the bus)
         /// </summary>
         public byte[] Address { get; set; }
+        /// <summary>
+        /// Contains an array of address of all 18B20 devices on network or only
+        /// devices in alarm if mode is set to SEARCH_ALARM 
+        /// </summary>
+        public byte[][] AddressNet { get; private set; }
         /// <summary>
         /// Set to true if more than one device connected ie network.
         /// </summary>
         public bool Multidrop { get; set; }
-        /// <summary>
-        /// Contains an array of address of all 18B20 devices on network
-        /// </summary>
-        public byte[][] AddressNet { get; private set; }
         /// <summary>
         /// Total number of 18B20 devices on network.
         /// </summary>
@@ -153,14 +155,15 @@ namespace nanoFramework.Companion.Drivers.Sensors
                 if (value > 125) { tempLoAlarm = 125; }
             }
         }
-
+        /// <summary>
+        /// Set search mode to normal
+        /// or only devices in alarm
+        /// </summary>
         private bool searchMode;
         public bool SetSearchMode
         {
             set { searchMode = value; }
         }
-
-
         #endregion
 
         #region Constructor
@@ -272,7 +275,8 @@ namespace nanoFramework.Companion.Drivers.Sensors
             if (Found > 0) { return true; };
             return false;
         }
-        void convert_T()
+
+        private void Convert_T()
         {
             _oneWire.TouchReset();
             //first address all devices
@@ -302,7 +306,7 @@ namespace nanoFramework.Companion.Drivers.Sensors
         {
             if ((Address != null || Found != 0) && Address.Length == 8 && Address[0] == FAMILY_CODE)
             {
-                convert_T();                                           
+                Convert_T();                                           
             }
         }
 
@@ -368,7 +372,7 @@ namespace nanoFramework.Companion.Drivers.Sensors
         {
             Address = null;
 
-            convert_T();
+            Convert_T();
             if (Initialize()) { return true; }
             return false;
         }
@@ -383,7 +387,6 @@ namespace nanoFramework.Companion.Drivers.Sensors
         /// </summary>
         public override bool ConfigurationRead()
         {
-            bool _restore = false;
             if (Address != null && Address.Length == 8 && Address[0] == FAMILY_CODE)
             {
                 //now write command and ROM at once
@@ -394,11 +397,13 @@ namespace nanoFramework.Companion.Drivers.Sensors
                 _oneWire.TouchReset();
                 foreach (var b in cmdAndData) _oneWire.WriteByte(b);
 
-                //now read the scratchpad
+                // Now read the scratchpad
                 var verify = _oneWire.WriteByte(READ_SCRATCHPAD);
 
-                _oneWire.ReadByte(); // Discard temperature bytes
+                // Discard temperature bytes
                 _oneWire.ReadByte();
+                _oneWire.ReadByte();
+
                 TempHiAlarm = (sbyte)_oneWire.ReadByte();
                 TempLoAlarm = (sbyte)_oneWire.ReadByte();
                 int configReg = _oneWire.ReadByte();
@@ -423,7 +428,8 @@ namespace nanoFramework.Companion.Drivers.Sensors
         public override bool ConfigurationWrite(bool save = false)
         {
             _oneWire.TouchReset();
-            //now write command and ROM at once
+
+            //Now write command and ROM at once
             byte[] cmdAndData = new byte[9] {
                    MATCH_ROM, //Address specific device command
                    Address[0],Address[1],Address[2],Address[3],Address[4],Address[5],Address[6],Address[7] //do not convert to a for..loop
