@@ -67,9 +67,13 @@ namespace nanoFramework.Companion
         /// Write Configuration to sensor
         /// </summary>
         bool ConfigurationWrite(bool save);
+
         /// <summary>
-        /// Search for alarm condition
+        /// Search for alarm condition.
+        /// Save in AddressNet the list of devices
+        /// under alarm condition.
         /// </summary>
+        /// <returns>bool</returns>
         bool SearchForAlarmCondition();
     }
 }

@@ -23,10 +23,11 @@ namespace OneWire_v3
 
             string devAddrStr = "";//store the device address as string...
 
+            ds18b20.SetSearchMode = DS18B20.NORMAL;
             if (ds18b20.Initialize())    //Initialize sensors | search for 18B20 devices
             {
-               Console.WriteLine("");
-               Console.WriteLine("Devices found = " + ds18b20.Found);
+                Console.WriteLine("");
+                Console.WriteLine("Devices found = " + ds18b20.Found);
                 for (int i = 0; i < ds18b20.Found; i++)
                 {
                     ds18b20.Address = ds18b20.AddressNet[i];
@@ -47,7 +48,7 @@ namespace OneWire_v3
 
             void loopReadAll()
             {
-                int loopRead = 40;
+                int loopRead = 10;
 
                 while (loopRead > 0)
                 {
@@ -74,20 +75,27 @@ namespace OneWire_v3
             // Set alarm setpoint for selected device
             void setAlarmSetPoints()
             {
-                    ds18b20.TempHiAlarm = 21;
-                    ds18b20.TempLoAlarm = -10;
-                    ds18b20.ConfigurationWrite(false); //Write configuration on ScratchPad,
-                                                       //If true, save it on EEPROM too.
+                ds18b20.TempHiAlarm = 23;
+                ds18b20.TempLoAlarm = -10;
+                ds18b20.ConfigurationWrite(false); //Write configuration on ScratchPad,
+                                                   //If true, save it on EEPROM too.
+                ds18b20.ConfigurationRead();
+                Console.WriteLine("Alarm Setpoints:");
+                Console.WriteLine("Hi alarm = " + ds18b20.TempHiAlarm + " C");
+                Console.WriteLine("Lo alarm = " + ds18b20.TempLoAlarm + " C");
+                Console.WriteLine("");
             }
 
             void alarmSearch()
             {
                 int loopRead = 40;
+                ds18b20.SetSearchMode = DS18B20.SEARCH_ALARM;
 
-                Console.WriteLine("LoopRead " + loopRead);
-                if (ds18b20.SearchForAlarmCondition()) // Update .AddressNet[] with devices under alarm
+                while (loopRead > 0)
                 {
-                    while (loopRead > 0)
+                    Console.WriteLine("LoopRead " + loopRead);
+
+                    if (ds18b20.SearchForAlarmCondition())
                     {
                         for (int index = 0; index < ds18b20.Found; index++)
                         {
@@ -96,28 +104,24 @@ namespace OneWire_v3
 
                             ds18b20.ConfigurationRead(); //Read alarm setpoint.
                             Console.WriteLine("Alarm Setpoints:");
-                            Console.WriteLine("Hi alarm =" + ds18b20.TempHiAlarm + " C");
-                            Console.WriteLine("Lo alarm =" + ds18b20.TempLoAlarm + " C");
+                            Console.WriteLine("Hi alarm = " + ds18b20.TempHiAlarm + " C");
+                            Console.WriteLine("Lo alarm = " + ds18b20.TempLoAlarm + " C");
 
                             devAddrStr = "";
                             foreach (var addrByte in ds18b20.AddressNet[index]) devAddrStr += addrByte.ToString("X2");
                             //Read Temperature on selected device
                             ds18b20.Read();
-                            Console.WriteLine("DS18B20[" + devAddrStr + "] Sensor reading in One-Shot-mode; T = " + ds18b20.TemperatureInCelcius.ToString() + " C");
+                            Console.WriteLine("DS18B20[" + devAddrStr + "] Sensor reading in One-Shot-mode; T = " + ds18b20.TemperatureInCelcius.ToString("f2") + " C");
                         }
                     }
-                    Console.WriteLine("");
+                    else
+                    {
+                        Console.WriteLine("***** No devices in alarm ****");
+                    }
+
                     loopRead--;
                 }
-                else
-                {
-                    notFound();
-                    Console.WriteLine("****In Alarm*****");
-
-                }; 
-
-
-
+                Console.WriteLine("");
             }
 
             void notFound()

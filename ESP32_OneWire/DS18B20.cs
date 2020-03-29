@@ -29,316 +29,349 @@ using nanoFramework.Devices.OneWire;
 
 namespace nanoFramework.Companion.Drivers.Sensors
 {
-   /// <summary>
-   /// Driver for DS18B20 temperature sensor. At the time of writing this code, more details about
-   /// this sensor can be found at https://datasheets.maximintegrated.com/en/ds/DS18B20.pdf
-   /// </summary>
-   public class DS18B20 : AbstractSensor
-   {
-       #region Implementation
-       /// <summary>
-       /// The underlying One Wire device
-       /// </summary>
-       private OneWireController _oneWire = null;
-       #endregion
-
-       #region Constants
-       /// <summary>
-       /// Command to soft reset the HTU21D sensor
-       /// </summary>
-       public static readonly byte FAMILY_CODE = 0x28;
-       /// <summary>
-       /// Command to address specific device on network
-       /// </summary>
-       public static readonly byte MATCH_ROM = 0x55;
-       /// <summary>
-       /// Command to address all devices on the bus simultaneously
-       /// </summary>
-       public static readonly byte SKIP_ROM = 0xCC;
-       /// <summary>
-       /// Command to trigger a temperature conversion
-       /// </summary>
-       private readonly byte CONVERT_TEMPERATURE = 0x44;
-       /// <summary>
-       /// Command to copy the scratchpad register
-       /// </summary>
-       private readonly byte COPY_SCRATCHPAD = 0x48;
-       /// <summary>
-       /// Command to write to scratchpad register
-       /// </summary>
-       private readonly byte WRITE_SCRATCHPAD = 0x4E;
-       /// <summary>
-       /// Command to read scratchpad register
-       /// </summary>
-       private readonly byte READ_SCRATCHPAD = 0xBE;
+    /// <summary>
+    /// Driver for DS18B20 temperature sensor. At the time of writing this code, more details about
+    /// this sensor can be found at https://datasheets.maximintegrated.com/en/ds/DS18B20.pdf
+    /// </summary>
+    public class DS18B20 : AbstractSensor
+    {
+        #region Implementation
         /// <summary>
-        /// Command to alarm search
+        /// The underlying One Wire device
         /// </summary>
-        private readonly byte ALARM_SEARCH = 0xEC;
+        private OneWireController _oneWire = null;
+        #endregion
+
+        #region Constants
+        /// <summary>
+        /// Command to soft reset the HTU21D sensor
+        /// </summary>
+        public static readonly byte FAMILY_CODE = 0x28;
+        /// <summary>
+        /// Command to address specific device on network
+        /// </summary>
+        public static readonly byte MATCH_ROM = 0x55;
+        /// <summary>
+        /// Command to address all devices on the bus simultaneously
+        /// </summary>
+        public static readonly byte SKIP_ROM = 0xCC;
+        /// <summary>
+        /// Set search mode to normal
+        /// </summary>
+        public const bool NORMAL = false;
+        /// <summary>
+        /// Set search mode to search alarm
+        /// </summary>
+        public const bool SEARCH_ALARM = true;
+        /// <summary>
+        /// Command to trigger a temperature conversion
+        /// </summary>
+        private readonly byte CONVERT_TEMPERATURE = 0x44;
+        /// <summary>
+        /// Command to copy the scratchpad register
+        /// </summary>
+        private readonly byte COPY_SCRATCHPAD = 0x48;
+        /// <summary>
+        /// Command to write to scratchpad register
+        /// </summary>
+        private readonly byte WRITE_SCRATCHPAD = 0x4E;
+        /// <summary>
+        /// Command to read scratchpad register
+        /// </summary>
+        private readonly byte READ_SCRATCHPAD = 0xBE;
         /// <summary>
         /// Error value of temperature
         /// </summary>
         private const float ERROR_TEMPERATURE = -999.99F;
-       #endregion
+        #endregion
 
-       #region Properties
-       /// <summary>
-       /// The 8-byte address of this device (since there could be more than one such devices on the bus)
-       /// </summary>
-       public byte[] Address { get; set; }
-       /// <summary>
-       /// Set to true if more than one device connected ie network.
-       /// </summary>
-       public bool Multidrop { get; set; }
-       /// <summary>
-       /// Contains an array of address of all 18B20 devices on network
-       /// </summary>
-       public byte[][] AddressNet { get; private set; }
-       /// <summary>
-       /// Total number of 18B20 devices on network.
-       /// </summary>
-       public int Found;
-       /// <summary>
-       /// Accessor/Mutator for temperature in celcius
-       /// </summary>
-       public float TemperatureInCelcius { get; private set; }
-       /// <summary>
-       /// Accessor/Mutator for Sensor resolution
-       /// R1=0,R0=0=>0 -> 9bit 
-       /// R1=0,R0=1=>1 -> 10bit 
-       /// R1=1,R0=0=>2 -> 11bit 
-       /// R1=1,R0=1=>3 -> 12bit (default on power up) 
-       /// </summary>
-       private int resolution;
-       public int Resolution
-       {
-           get { return resolution; }
-           set
-           {
-               resolution = value < 0 ? 0 : value > 3 ? 3 : value;
-           }
+        #region Properties
+        /// <summary>
+        /// The 8-byte address of this device (since there could be more than one such devices on the bus)
+        /// </summary>
+        public byte[] Address { get; set; }
+        /// <summary>
+        /// Set to true if more than one device connected ie network.
+        /// </summary>
+        public bool Multidrop { get; set; }
+        /// <summary>
+        /// Contains an array of address of all 18B20 devices on network
+        /// </summary>
+        public byte[][] AddressNet { get; private set; }
+        /// <summary>
+        /// Total number of 18B20 devices on network.
+        /// </summary>
+        public int Found;
+        /// <summary>
+        /// Accessor/Mutator for temperature in celcius
+        /// </summary>
+        public float TemperatureInCelcius { get; private set; }
+        /// <summary>
+        /// Accessor/Mutator for Sensor resolution
+        /// R1=0,R0=0=>0 -> 9bit 
+        /// R1=0,R0=1=>1 -> 10bit 
+        /// R1=1,R0=0=>2 -> 11bit 
+        /// R1=1,R0=1=>3 -> 12bit (default on power up) 
+        /// </summary>
+        private int resolution;
+        public int Resolution
+        {
+            get { return resolution; }
+            set
+            {
+                resolution = value < 0 ? 0 : value > 3 ? 3 : value;
+            }
 
-       }
-       /// <summary>
-       /// Accessor/Mutator for Alarm Hi register in celcius
-       /// Min -55, Max 125
-       /// </summary>
-       private sbyte tempHiAlarm;
-       public sbyte TempHiAlarm
-       {
-           get { return tempHiAlarm; }
-           set
-           {
-               tempHiAlarm = value;
-               if (value < -55) { tempHiAlarm = -55; }
-               if (value > 125) { tempHiAlarm = 125; }
-           }
-       }
-       /// <summary>
-       /// Accessor/Mutator for Alarm Lo register in celcius
-       /// Min -55, Max 125
-       /// </summary>
-       private sbyte tempLoAlarm;
-       public sbyte TempLoAlarm
-       {
-           get { return tempLoAlarm; }
-           set
-           {
-               tempLoAlarm = value;
-               if (value < -55) { tempLoAlarm = -55; }
-               if (value > 125) { tempLoAlarm = 125; }
-           }
-       }
-       #endregion
+        }
+        /// <summary>
+        /// Accessor/Mutator for Alarm Hi register in celcius
+        /// Min -55, Max 125
+        /// </summary>
+        private sbyte tempHiAlarm;
+        public sbyte TempHiAlarm
+        {
+            get { return tempHiAlarm; }
+            set
+            {
+                tempHiAlarm = value;
+                if (value < -55) { tempHiAlarm = -55; }
+                if (value > 125) { tempHiAlarm = 125; }
+            }
+        }
+        /// <summary>
+        /// Accessor/Mutator for Alarm Lo register in celcius
+        /// Min -55, Max 125
+        /// </summary>
+        private sbyte tempLoAlarm;
+        public sbyte TempLoAlarm
+        {
+            get { return tempLoAlarm; }
+            set
+            {
+                tempLoAlarm = value;
+                if (value < -55) { tempLoAlarm = -55; }
+                if (value > 125) { tempLoAlarm = 125; }
+            }
+        }
 
-       #region Constructor
-       /// <summary>
-       /// Constructor
-       /// </summary>
-       /// <param name="owBus">Which one wire controller (logical bus) to use</param>
-       /// <param name="deviceAddr">The device address (if null, then this device will search for one on the bus and latch on to the first one found)</param>
-       /// <param name="Multidrop"> True for more than one sensor</param>
-       /// <param name="Resolution">Sensor resolution</param>
-       public DS18B20(OneWireController owBus, byte[] deviceAddr = null, bool multidrop = false, int resolution = 3)
-       {
-           _oneWire = owBus;
-           Multidrop = multidrop;
-           Resolution = resolution;
+        private bool searchMode;
+        public bool SetSearchMode
+        {
+            set { searchMode = value; }
+        }
 
-           if (deviceAddr != null)
-           {
-               if (deviceAddr.Length != 8) throw new ArgumentException();//must be 8 bytes
-               if (deviceAddr[0] != FAMILY_CODE) throw new ArgumentException();//invalid family code
-               Address = deviceAddr;
-           }
-           TemperatureInCelcius = ERROR_TEMPERATURE;
-           TempHiAlarm = 30; // Set default alarm values
-           TempLoAlarm = 20;
-       }
-       #endregion
 
-       #region IDisposable Support
+        #endregion
 
-       /// <summary>
-       /// Dispose this object
-       /// </summary>
-       protected override void DisposeSensor()
-       {
-           Address = null;
-       }
-       #endregion
+        #region Constructor
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="owBus">Which one wire controller (logical bus) to use</param>
+        /// <param name="deviceAddr">The device address (if null, then this device will search for one on the bus and latch on to the first one found)</param>
+        /// <param name="Multidrop"> True for more than one sensor</param>
+        /// <param name="Resolution">Sensor resolution</param>
+        public DS18B20(OneWireController owBus, byte[] deviceAddr = null, bool multidrop = false, int resolution = 3)
+        {
+            _oneWire = owBus;
+            Multidrop = multidrop;
+            Resolution = resolution;
 
-       #region Core Methods
-       /// <summary>
-       /// Initialize the sensor. This step will perform a reset of the 1-wire bus.
-       /// It will check for existence of a 1-wire device. If no address was provided, then the
-       /// 1-wire bus will be searched and the first device that matches the family code will be latched on to.
-       /// Developer should check for successful initialization by checking the value returned. 
-       /// It must be bigger than 0.
-       /// If in Multidrop mode will keep seaching until find last device, saving all in AddressNet array.
-       /// </summary>
-       public override bool Initialize()
-       {
-           Found = 0;
-           //ArrayList allDevices;
-           ArrayList allDevices = new ArrayList();
-           while(_oneWire.TouchReset() == false) { Thread.Sleep(1000); }
-          
-           if (Address == null) //search for a device with the required family code
-           {
-               //found the device
-               if (Multidrop)
-               {
-                   if (_oneWire.FindFirstDevice(false, false))
-                   {
-                       do
-                       {
-                           if (_oneWire.SerialNumber[0] == FAMILY_CODE)
-                           {
-                               _oneWire.TouchReset();
-                               Address = new byte[_oneWire.SerialNumber.Length];
-                               Array.Copy(_oneWire.SerialNumber, Address, _oneWire.SerialNumber.Length);
-                               Found++;
-                               allDevices.Add(Address);
-                               //if (Found == 6) { break; } //Temp fix during test endless loop
-                           }
-                       } while (_oneWire.FindNextDevice(false, false));//keep searching until we get one
-                   }
-                   
-                   if (Found > 0)
-                   {
-                       AddressNet = new byte[Found][];
-                       int i = 0;
-                       foreach (byte[] device in allDevices)
-                       {
-                           AddressNet[i] = new byte[device.Length];
-                           Array.Copy(device, AddressNet[i], device.Length);
-                           i++;
-                       }
-                       allDevices = null;
-                   }
-               }
-               else
-               {
-                   if (_oneWire.FindFirstDevice(true, false))
-                   {
-                       do
-                       {
-                           if (_oneWire.SerialNumber[0] == FAMILY_CODE)
-                           {
-                               Address = new byte[_oneWire.SerialNumber.Length];
-                               Array.Copy(_oneWire.SerialNumber, Address, _oneWire.SerialNumber.Length);
-                               Found = 1;
-                               break;
-                           }
-                       } while (_oneWire.FindNextDevice(true, false));//keep searching until we get one
-                   }
-               }
+            if (deviceAddr != null)
+            {
+                if (deviceAddr.Length != 8) throw new ArgumentException();//must be 8 bytes
+                if (deviceAddr[0] != FAMILY_CODE) throw new ArgumentException();//invalid family code
+                Address = deviceAddr;
+            }
+            TemperatureInCelcius = ERROR_TEMPERATURE;
+            TempHiAlarm = 30; // Set default alarm values
+            TempLoAlarm = 20;
+        }
+        #endregion
 
-           }
+        #region IDisposable Support
+
+        /// <summary>
+        /// Dispose this object
+        /// </summary>
+        protected override void DisposeSensor()
+        {
+            Address = null;
+        }
+        #endregion
+
+        #region Core Methods
+        /// <summary>
+        /// Initialize the sensor. This step will perform a reset of the 1-wire bus.
+        /// It will check for existence of a 1-wire device. If no address was provided, then the
+        /// 1-wire bus will be searched and the first device that matches the family code will be latched on to.
+        /// Developer should check for successful initialization by checking the value returned. 
+        /// It must be bigger than 0.
+        /// If in Multidrop mode will keep seaching until find last device, saving all in AddressNet array.
+        /// </summary>
+        public override bool Initialize()
+        {
+            Found = 0;
+            //ArrayList allDevices;
+            ArrayList allDevices = new ArrayList();
+
+            while (_oneWire.TouchReset() == false) { Thread.Sleep(1000); }
+
+            if (Address == null) //search for a device with the required family code
+            {
+                //found the device
+                if (Multidrop)
+                {
+                    if (_oneWire.FindFirstDevice(false, searchMode))
+                    {
+                        do
+                        {
+                            if (_oneWire.SerialNumber[0] == FAMILY_CODE)
+                            {
+                                _oneWire.TouchReset();
+                                Address = new byte[_oneWire.SerialNumber.Length];
+                                Array.Copy(_oneWire.SerialNumber, Address, _oneWire.SerialNumber.Length);
+                                Found++;
+                                allDevices.Add(Address);
+                                //if (Found == 6) { break; } //Temp fix during test endless loop
+                            }
+                        } while (_oneWire.FindNextDevice(false, searchMode));//keep searching until we get one
+                    }
+
+                    if (Found > 0)
+                    {
+                        AddressNet = new byte[Found][];
+                        int i = 0;
+                        foreach (byte[] device in allDevices)
+                        {
+                            AddressNet[i] = new byte[device.Length];
+                            Array.Copy(device, AddressNet[i], device.Length);
+                            i++;
+                        }
+                        allDevices = null;
+                    }
+                }
+                else
+                {
+                    if (_oneWire.FindFirstDevice(true, searchMode))
+                    {
+                        do
+                        {
+                            if (_oneWire.SerialNumber[0] == FAMILY_CODE)
+                            {
+                                Address = new byte[_oneWire.SerialNumber.Length];
+                                Array.Copy(_oneWire.SerialNumber, Address, _oneWire.SerialNumber.Length);
+                                Found = 1;
+                                break;
+                            }
+                        } while (_oneWire.FindNextDevice(true, searchMode));//keep searching until we get one
+                    }
+                }
+
+            }
             if (Found > 0) { return true; };
             return false;
-       }
-       /// <summary>
-       /// Prepare sensor to read the data
-       /// </summary>
-       public override void PrepareToRead()
-       {
-           if ((Address != null || Found != 0 ) && Address.Length == 8 && Address[0] == FAMILY_CODE)
-           {
-               _oneWire.TouchReset();
-               //first address all devices
-               _oneWire.WriteByte(SKIP_ROM);//Skip ROM command
-               _oneWire.WriteByte(CONVERT_TEMPERATURE);//convert temperature
-               // According datasheet. Less resolution needs less time to complete.
-               int waitConversion = 1000;
-               switch (Resolution)
-               {
-                   case 0:
-                       waitConversion = 125;
-                       break;
-                   case 1:
-                       waitConversion = 250;
-                       break;
-                   case 2:
-                       waitConversion = 500;
-                       break;
-               }
-               Thread.Sleep(waitConversion); //Wait for conversion (in default 12-bit resolution mode, 1000ms)                                            
-           }
-       }
+        }
+        void convert_T()
+        {
+            _oneWire.TouchReset();
+            //first address all devices
+            _oneWire.WriteByte(SKIP_ROM);//Skip ROM command
+            _oneWire.WriteByte(CONVERT_TEMPERATURE);//convert temperature
+                                                    // According datasheet. Less resolution needs less time to complete.
+            int waitConversion = 1000;
+            switch (Resolution)
+            {
+                case 0:
+                    waitConversion = 125;
+                    break;
+                case 1:
+                    waitConversion = 250;
+                    break;
+                case 2:
+                    waitConversion = 500;
+                    break;
+            }
+            Thread.Sleep(waitConversion); //Wait for conversion (in default 12-bit resolution mode, 1000ms) 
 
-       /// <summary>
-       /// Read sensor data
-       /// </summary>
-       /// <returns>true on success, else false</returns>
-       public override bool Read()
-       {
-           if (Address != null && Address.Length == 8 && Address[0] == FAMILY_CODE)
-           {
-               //now write command and ROM at once
-               byte[] cmdAndData = new byte[9] {
+        }
+        /// <summary>
+        /// Prepare sensor to read the data
+        /// </summary>
+        public override void PrepareToRead()
+        {
+            if ((Address != null || Found != 0) && Address.Length == 8 && Address[0] == FAMILY_CODE)
+            {
+                convert_T();                                           
+            }
+        }
+
+        /// <summary>
+        /// Read sensor data
+        /// </summary>
+        /// <returns>true on success, else false</returns>
+        public override bool Read()
+        {
+            if (Address != null && Address.Length == 8 && Address[0] == FAMILY_CODE)
+            {
+                //now write command and ROM at once
+                byte[] cmdAndData = new byte[9] {
                    MATCH_ROM, //Address specific device command
                    Address[0],Address[1],Address[2],Address[3],Address[4],Address[5],Address[6],Address[7] //do not convert to a for..loop
                };
 
-               _oneWire.TouchReset();
-               foreach (var b in cmdAndData) _oneWire.WriteByte(b);
+                _oneWire.TouchReset();
+                foreach (var b in cmdAndData) _oneWire.WriteByte(b);
 
-               //now read the scratchpad
-               var verify = _oneWire.WriteByte(READ_SCRATCHPAD);
+                //now read the scratchpad
+                var verify = _oneWire.WriteByte(READ_SCRATCHPAD);
 
-               //Now read the temperature
-               var tempLo = _oneWire.ReadByte();
-               var tempHi = _oneWire.ReadByte();
+                //Now read the temperature
+                var tempLo = _oneWire.ReadByte();
+                var tempHi = _oneWire.ReadByte();
 
-               if (_oneWire.TouchReset())
-               {
-                   var temp = ((tempHi << 8) | tempLo);
+                if (_oneWire.TouchReset())
+                {
+                    var temp = ((tempHi << 8) | tempLo);
 
-                   // Bits manipulation to represent negative values correctly.
-                   if ((tempHi >> 7) == 1)
-                   {
-                       temp = (temp | unchecked((int)0xffff0000));
-                   }
+                    // Bits manipulation to represent negative values correctly.
+                    if ((tempHi >> 7) == 1)
+                    {
+                        temp = (temp | unchecked((int)0xffff0000));
+                    }
 
-                   TemperatureInCelcius = ((float)temp) / 16;
-               }
-               else
-                   TemperatureInCelcius = ERROR_TEMPERATURE;
-           }
-           return (TemperatureInCelcius != ERROR_TEMPERATURE);
-       }
-       /// <summary>
-       /// Reset the sensor...this performs a soft reset. To perform a hard reset, the system must be 
-       /// power cycled
-       /// </summary>
-       public override void Reset()
-       {
-           _oneWire.TouchReset();
-           TemperatureInCelcius = ERROR_TEMPERATURE;
-       }
+                    TemperatureInCelcius = ((float)temp) / 16;
+                }
+                else
+                    TemperatureInCelcius = ERROR_TEMPERATURE;
+            }
+            return (TemperatureInCelcius != ERROR_TEMPERATURE);
+        }
+        /// <summary>
+        /// Reset the sensor...this performs a soft reset. To perform a hard reset, the system must be 
+        /// power cycled
+        /// </summary>
+        public override void Reset()
+        {
+            _oneWire.TouchReset();
+            TemperatureInCelcius = ERROR_TEMPERATURE;
+        }
         #endregion
+
+        /// <summary>
+        /// Search for alarm condition.
+        /// Save in AddressNet the list of devices
+        /// under alarm condition.
+        /// </summary>
+        /// <returns>bool</returns>
+        public override bool SearchForAlarmCondition()
+        {
+            Address = null;
+
+            convert_T();
+            if (Initialize()) { return true; }
+            return false;
+        }
 
         #region Configuration Methods
         /// <summary>
@@ -349,26 +382,26 @@ namespace nanoFramework.Companion.Drivers.Sensors
         /// error during property handle.
         /// </summary>
         public override bool ConfigurationRead()
-       {
-           bool _restore = false;
-           if (Address != null && Address.Length == 8 && Address[0] == FAMILY_CODE)
-           {
-               //now write command and ROM at once
-               byte[] cmdAndData = new byte[9] {
+        {
+            bool _restore = false;
+            if (Address != null && Address.Length == 8 && Address[0] == FAMILY_CODE)
+            {
+                //now write command and ROM at once
+                byte[] cmdAndData = new byte[9] {
                    MATCH_ROM, //Address specific device command
                    Address[0],Address[1],Address[2],Address[3],Address[4],Address[5],Address[6],Address[7] //do not convert to a for..loop
                };
-               _oneWire.TouchReset();
-               foreach (var b in cmdAndData) _oneWire.WriteByte(b);
+                _oneWire.TouchReset();
+                foreach (var b in cmdAndData) _oneWire.WriteByte(b);
 
-               //now read the scratchpad
-               var verify = _oneWire.WriteByte(READ_SCRATCHPAD);
+                //now read the scratchpad
+                var verify = _oneWire.WriteByte(READ_SCRATCHPAD);
 
-               _oneWire.ReadByte(); // Discard temperature bytes
-               _oneWire.ReadByte();
-               TempHiAlarm = (sbyte)_oneWire.ReadByte();
-               TempLoAlarm = (sbyte)_oneWire.ReadByte();
-               int configReg = _oneWire.ReadByte();
+                _oneWire.ReadByte(); // Discard temperature bytes
+                _oneWire.ReadByte();
+                TempHiAlarm = (sbyte)_oneWire.ReadByte();
+                TempLoAlarm = (sbyte)_oneWire.ReadByte();
+                int configReg = _oneWire.ReadByte();
 
                 if (_oneWire.TouchReset())
                 {
@@ -379,31 +412,31 @@ namespace nanoFramework.Companion.Drivers.Sensors
                     Resolution = 0xEE;
                 };
             }
-           return Resolution != ERROR_TEMPERATURE;
-       }
-       /// <summary>
-       /// Write sensor Configuration
-       /// from tempHiAlarm, tempLoAlarm and
-       /// resolution.
-       /// The unchanged registers will be overwritten.
-       /// </summary>
-       public override bool ConfigurationWrite(bool save = false)
-       {
-           _oneWire.TouchReset();
-           //now write command and ROM at once
-           byte[] cmdAndData = new byte[9] {
+            return Resolution != ERROR_TEMPERATURE;
+        }
+        /// <summary>
+        /// Write sensor Configuration
+        /// from tempHiAlarm, tempLoAlarm and
+        /// resolution.
+        /// The unchanged registers will be overwritten.
+        /// </summary>
+        public override bool ConfigurationWrite(bool save = false)
+        {
+            _oneWire.TouchReset();
+            //now write command and ROM at once
+            byte[] cmdAndData = new byte[9] {
                    MATCH_ROM, //Address specific device command
                    Address[0],Address[1],Address[2],Address[3],Address[4],Address[5],Address[6],Address[7] //do not convert to a for..loop
                };
-           _oneWire.TouchReset();
-           foreach (var b in cmdAndData) _oneWire.WriteByte(b);
+            _oneWire.TouchReset();
+            foreach (var b in cmdAndData) _oneWire.WriteByte(b);
 
-           //now write the scratchpad
-           var verify = _oneWire.WriteByte(WRITE_SCRATCHPAD);
+            //now write the scratchpad
+            var verify = _oneWire.WriteByte(WRITE_SCRATCHPAD);
 
-           _oneWire.WriteByte((byte)tempHiAlarm);
-           _oneWire.WriteByte((byte)tempLoAlarm);
-           _oneWire.WriteByte((byte)(resolution << 5));
+            _oneWire.WriteByte((byte)tempHiAlarm);
+            _oneWire.WriteByte((byte)tempLoAlarm);
+            _oneWire.WriteByte((byte)(resolution << 5));
 
             // Save confuguration permanently on device's EEPROM
             if (save)
@@ -412,54 +445,37 @@ namespace nanoFramework.Companion.Drivers.Sensors
             };
             _oneWire.TouchReset();
 
-           return true;
-       }
-       #endregion
+            return true;
+        }
+        #endregion
 
-       #region Change tracking
-       /// <summary>
-       /// This sensor suports change tracking
-       /// </summary>
-       /// <returns>bool</returns>
-       public override bool CanTrackChanges()
-       {
-           return true;
-       }
-
+        #region Change tracking
         /// <summary>
-        /// Search for alarm condition.
-        /// Save in AddressNet the list of devices
-        /// under alarm condition.
+        /// This sensor suports change tracking
         /// </summary>
         /// <returns>bool</returns>
-        public override bool SearchForAlarmCondition()
+        public override bool CanTrackChanges()
         {
-            _oneWire.TouchReset();
-            _oneWire.WriteByte(SKIP_ROM); 
-            var verify = _oneWire.WriteByte(ALARM_SEARCH); //Alarm seach command
-            Initialize(); //Save the device address in alarm
-
-            if (Initialize()) { return true; }
-            return false;
+            return true;
         }
 
-       /// <summary>
-       /// Let the world know whether the sensor value has changed or not
-       /// </summary>
-       /// <returns>bool</returns>
+        /// <summary>
+        /// Let the world know whether the sensor value has changed or not
+        /// </summary>
+        /// <returns>bool</returns>
         public override bool HasSensorValueChanged()
-       {
-           float previousTemperature = TemperatureInCelcius;
+        {
+            float previousTemperature = TemperatureInCelcius;
 
-           PrepareToRead();
-           Read();
+            PrepareToRead();
+            Read();
 
-           float currentTemperature = TemperatureInCelcius;
+            float currentTemperature = TemperatureInCelcius;
 
-           bool valuesChanged = (previousTemperature != currentTemperature);
+            bool valuesChanged = (previousTemperature != currentTemperature);
 
-           return valuesChanged;
-       }
-       #endregion        
-   }
+            return valuesChanged;
+        }
+        #endregion
+    }
 }

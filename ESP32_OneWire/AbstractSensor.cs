@@ -188,8 +188,11 @@ namespace nanoFramework.Companion
         /// </summary>
         public abstract bool ConfigurationWrite(bool save);
         /// <summary>
-        /// Search for alarm condition
+        /// Search for alarm condition.
+        /// Save in AddressNet the list of devices
+        /// under alarm condition.
         /// </summary>
+        /// <returns>bool</returns>
         public abstract bool SearchForAlarmCondition();
         #endregion
 
