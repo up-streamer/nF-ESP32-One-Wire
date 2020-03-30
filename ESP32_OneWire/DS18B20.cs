@@ -68,17 +68,27 @@ namespace nanoFramework.Companion.Drivers.Sensors
         /// </summary>
         private readonly byte CONVERT_TEMPERATURE = 0x44;
         /// <summary>
-        /// Command to copy the scratchpad register
+        /// Command copy scratchpad registers to EEPROM
         /// </summary>
         private readonly byte COPY_SCRATCHPAD = 0x48;
         /// <summary>
-        /// Command to write to scratchpad register
+        /// Recalls the alarm trigger values and configuration
+        /// from EEPROM to scratchpad registers
+        /// </summary>
+        private readonly byte RECALL_E2 = 0xB8;
+        /// <summary>
+        /// Command to write to scratchpad registers
         /// </summary>
         private readonly byte WRITE_SCRATCHPAD = 0x4E;
         /// <summary>
-        /// Command to read scratchpad register
+        /// Command to read scratchpad registers
         /// </summary>
         private readonly byte READ_SCRATCHPAD = 0xBE;
+        /// <summary>
+        /// Check if any DS18B20s on the bus are using parasite power
+        /// Return false for parasite power, true for external power
+        /// </summary>
+        private readonly byte READ_POWER_SUPPLY = 0xB8;
         /// <summary>
         /// Error value of temperature
         /// </summary>
@@ -299,6 +309,7 @@ namespace nanoFramework.Companion.Drivers.Sensors
             Thread.Sleep(waitConversion); //Wait for conversion (in default 12-bit resolution mode, 1000ms) 
 
         }
+
         /// <summary>
         /// Prepare sensor to read the data
         /// </summary>
@@ -351,6 +362,7 @@ namespace nanoFramework.Companion.Drivers.Sensors
             }
             return (TemperatureInCelcius != ERROR_TEMPERATURE);
         }
+
         /// <summary>
         /// Reset the sensor...this performs a soft reset. To perform a hard reset, the system must be 
         /// power cycled
@@ -419,6 +431,7 @@ namespace nanoFramework.Companion.Drivers.Sensors
             }
             return Resolution != ERROR_TEMPERATURE;
         }
+
         /// <summary>
         /// Write sensor Configuration
         /// from tempHiAlarm, tempLoAlarm and
