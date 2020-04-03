@@ -182,7 +182,7 @@ namespace nanoFramework.Companion
         /// <summary>
         /// Read Configuration from sensor
         /// </summary>
-        public abstract bool ConfigurationRead();
+        public abstract bool ConfigurationRead(bool recall);
         /// <summary>
         /// Write Configuration to sensor
         /// </summary>

@@ -77,7 +77,7 @@ namespace OneWire_v3
             {
                 ds18b20.TempHiAlarm = 23;
                 ds18b20.TempLoAlarm = -10;
-                ds18b20.ConfigurationWrite(false); //Write configuration on ScratchPad,
+                ds18b20.ConfigurationWrite(); //Write configuration on ScratchPad,
                                                    //If true, save it on EEPROM too.
                 ds18b20.ConfigurationRead();
                 Console.WriteLine("Alarm Setpoints:");

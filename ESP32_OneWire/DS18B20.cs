@@ -317,7 +317,7 @@ namespace nanoFramework.Companion.Drivers.Sensors
         {
             if ((Address != null || Found != 0) && Address.Length == 8 && Address[0] == FAMILY_CODE)
             {
-                Convert_T();                                           
+                Convert_T();
             }
         }
 
@@ -397,8 +397,12 @@ namespace nanoFramework.Companion.Drivers.Sensors
         /// Write 0xEE (238) to a property if
         /// error during property handle.
         /// </summary>
-        public override bool ConfigurationRead()
+        public override bool ConfigurationRead(bool recall = false)
         {
+            if (recall == true)
+            {
+                var verify = _oneWire.WriteByte(RECALL_E2);
+            }
             if (Address != null && Address.Length == 8 && Address[0] == FAMILY_CODE)
             {
                 //now write command and ROM at once
@@ -465,6 +469,30 @@ namespace nanoFramework.Companion.Drivers.Sensors
             _oneWire.TouchReset();
 
             return true;
+        }
+
+        public bool IsParasitePowered()
+        {
+            if (Address != null && Address.Length == 8 && Address[0] == FAMILY_CODE)
+            {
+                //now write command and ROM at once
+                byte[] cmdAndData = new byte[9] {
+                   MATCH_ROM, //Address specific device command
+                   Address[0],Address[1],Address[2],Address[3],Address[4],Address[5],Address[6],Address[7] //do not convert to a for..loop
+               };
+                _oneWire.TouchReset();
+                foreach (var b in cmdAndData) _oneWire.WriteByte(b);
+
+                // Now read power supply external | parasite
+                var verify = _oneWire.WriteByte(READ_POWER_SUPPLY);
+
+
+                if (_oneWire.ReadByte() == 0x00) { return true; } else { return false; }
+
+
+            }
+            return false;
+
         }
         #endregion
 
