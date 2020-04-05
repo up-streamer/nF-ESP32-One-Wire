@@ -75,12 +75,17 @@ namespace OneWire_v3
             // Set alarm setpoint for selected device
             void setAlarmSetPoints()
             {
-                ds18b20.TempHiAlarm = 23;
-                ds18b20.TempLoAlarm = -10;
-                ds18b20.ConfigurationWrite(); //Write configuration on ScratchPad,
+                ds18b20.ConfigurationRead(false);
+                Console.WriteLine("Alarm Setpoints before RecallE2:");
+                Console.WriteLine("Hi alarm = " + ds18b20.TempHiAlarm + " C");
+                Console.WriteLine("Lo alarm = " + ds18b20.TempLoAlarm + " C");
+
+                ds18b20.TempHiAlarm = 30;
+                ds18b20.TempLoAlarm = 25;
+                ds18b20.ConfigurationWrite(true); //Write configuration on ScratchPad,
                                                    //If true, save it on EEPROM too.
-                ds18b20.ConfigurationRead();
-                Console.WriteLine("Alarm Setpoints:");
+                ds18b20.ConfigurationRead(true);
+                Console.WriteLine("Alarm Setpoints-RecallE2:");
                 Console.WriteLine("Hi alarm = " + ds18b20.TempHiAlarm + " C");
                 Console.WriteLine("Lo alarm = " + ds18b20.TempLoAlarm + " C");
                 Console.WriteLine("");
@@ -101,8 +106,7 @@ namespace OneWire_v3
                         {
                             //Select the device
                             ds18b20.Address = ds18b20.AddressNet[index];
-
-                            ds18b20.ConfigurationRead(); //Read alarm setpoint.
+                            ds18b20.ConfigurationRead(false); //Read alarm setpoint.
                             Console.WriteLine("Alarm Setpoints:");
                             Console.WriteLine("Hi alarm = " + ds18b20.TempHiAlarm + " C");
                             Console.WriteLine("Lo alarm = " + ds18b20.TempLoAlarm + " C");

@@ -286,6 +286,21 @@ namespace nanoFramework.Companion.Drivers.Sensors
             return false;
         }
 
+        private void SelectDevice()
+        {
+            if (Address != null && Address.Length == 8 && Address[0] == FAMILY_CODE)
+            {
+                //now write command and ROM at once
+                byte[] cmdAndData = new byte[9] {
+                   MATCH_ROM, //Address specific device command
+                   Address[0],Address[1],Address[2],Address[3],Address[4],Address[5],Address[6],Address[7] //do not convert to a for..loop
+               };
+
+                _oneWire.TouchReset();
+                foreach (var b in cmdAndData) _oneWire.WriteByte(b);
+            }
+        }
+
         private void Convert_T()
         {
             _oneWire.TouchReset();
@@ -327,40 +342,33 @@ namespace nanoFramework.Companion.Drivers.Sensors
         /// <returns>true on success, else false</returns>
         public override bool Read()
         {
-            if (Address != null && Address.Length == 8 && Address[0] == FAMILY_CODE)
+            SelectDevice();
+
+            //now read the scratchpad
+            var verify = _oneWire.WriteByte(READ_SCRATCHPAD);
+
+            //Now read the temperature
+            var tempLo = _oneWire.ReadByte();
+            var tempHi = _oneWire.ReadByte();
+
+            if (_oneWire.TouchReset())
             {
-                //now write command and ROM at once
-                byte[] cmdAndData = new byte[9] {
-                   MATCH_ROM, //Address specific device command
-                   Address[0],Address[1],Address[2],Address[3],Address[4],Address[5],Address[6],Address[7] //do not convert to a for..loop
-               };
+                var temp = ((tempHi << 8) | tempLo);
 
-                _oneWire.TouchReset();
-                foreach (var b in cmdAndData) _oneWire.WriteByte(b);
-
-                //now read the scratchpad
-                var verify = _oneWire.WriteByte(READ_SCRATCHPAD);
-
-                //Now read the temperature
-                var tempLo = _oneWire.ReadByte();
-                var tempHi = _oneWire.ReadByte();
-
-                if (_oneWire.TouchReset())
+                // Bits manipulation to represent negative values correctly.
+                if ((tempHi >> 7) == 1)
                 {
-                    var temp = ((tempHi << 8) | tempLo);
-
-                    // Bits manipulation to represent negative values correctly.
-                    if ((tempHi >> 7) == 1)
-                    {
-                        temp = (temp | unchecked((int)0xffff0000));
-                    }
-
-                    TemperatureInCelcius = ((float)temp) / 16;
+                    temp = (temp | unchecked((int)0xffff0000));
                 }
-                else
-                    TemperatureInCelcius = ERROR_TEMPERATURE;
+
+                TemperatureInCelcius = ((float)temp) / 16;
+                return true;
             }
-            return (TemperatureInCelcius != ERROR_TEMPERATURE);
+            else
+            {
+                TemperatureInCelcius = ERROR_TEMPERATURE;
+                return false;
+            }
         }
 
         /// <summary>
@@ -399,41 +407,40 @@ namespace nanoFramework.Companion.Drivers.Sensors
         /// </summary>
         public override bool ConfigurationRead(bool recall = false)
         {
+            var verify = 0;
+
+            // Restore Register from EEPROM
             if (recall == true)
             {
-                var verify = _oneWire.WriteByte(RECALL_E2);
+                SelectDevice();
+                verify = _oneWire.WriteByte(RECALL_E2);
+                while (_oneWire.ReadByte() == 0) { Thread.Sleep(10); }
+                Console.WriteLine("verify RECALL_E2 = " + verify.ToString());
             }
-            if (Address != null && Address.Length == 8 && Address[0] == FAMILY_CODE)
+
+            // Now read the scratchpad
+            SelectDevice();
+            verify = _oneWire.WriteByte(READ_SCRATCHPAD);
+            Console.WriteLine("verify READ_SCRATCHPAD = " + verify.ToString());
+            // Discard temperature bytes
+            _oneWire.ReadByte();
+            _oneWire.ReadByte();
+
+            TempHiAlarm = (sbyte)_oneWire.ReadByte();
+            TempLoAlarm = (sbyte)_oneWire.ReadByte();
+            int configReg = _oneWire.ReadByte();
+
+            if (_oneWire.TouchReset())
             {
-                //now write command and ROM at once
-                byte[] cmdAndData = new byte[9] {
-                   MATCH_ROM, //Address specific device command
-                   Address[0],Address[1],Address[2],Address[3],Address[4],Address[5],Address[6],Address[7] //do not convert to a for..loop
-               };
-                _oneWire.TouchReset();
-                foreach (var b in cmdAndData) _oneWire.WriteByte(b);
-
-                // Now read the scratchpad
-                var verify = _oneWire.WriteByte(READ_SCRATCHPAD);
-
-                // Discard temperature bytes
-                _oneWire.ReadByte();
-                _oneWire.ReadByte();
-
-                TempHiAlarm = (sbyte)_oneWire.ReadByte();
-                TempLoAlarm = (sbyte)_oneWire.ReadByte();
-                int configReg = _oneWire.ReadByte();
-
-                if (_oneWire.TouchReset())
-                {
-                    Resolution = (configReg >> 5);
-                }
-                else
-                {
-                    Resolution = 0xEE;
-                };
+                Resolution = (configReg >> 5);
             }
-            return Resolution != ERROR_TEMPERATURE;
+            else
+            {
+                Resolution = 0xEE;
+                return false;
+            };
+
+            return true;
         }
 
         /// <summary>
@@ -444,15 +451,8 @@ namespace nanoFramework.Companion.Drivers.Sensors
         /// </summary>
         public override bool ConfigurationWrite(bool save = false)
         {
-            _oneWire.TouchReset();
 
-            //Now write command and ROM at once
-            byte[] cmdAndData = new byte[9] {
-                   MATCH_ROM, //Address specific device command
-                   Address[0],Address[1],Address[2],Address[3],Address[4],Address[5],Address[6],Address[7] //do not convert to a for..loop
-               };
-            _oneWire.TouchReset();
-            foreach (var b in cmdAndData) _oneWire.WriteByte(b);
+            SelectDevice();
 
             //now write the scratchpad
             var verify = _oneWire.WriteByte(WRITE_SCRATCHPAD);
@@ -461,68 +461,58 @@ namespace nanoFramework.Companion.Drivers.Sensors
             _oneWire.WriteByte((byte)tempLoAlarm);
             _oneWire.WriteByte((byte)(resolution << 5));
 
-            // Save confuguration permanently on device's EEPROM
+            //_oneWire.TouchReset();
+            // Save confuguration on device's EEPROM
             if (save)
             {
+                SelectDevice();
                 verify = _oneWire.WriteByte(COPY_SCRATCHPAD);
+                Thread.Sleep(10);
             };
-            _oneWire.TouchReset();
+
 
             return true;
         }
 
         public bool IsParasitePowered()
         {
-            if (Address != null && Address.Length == 8 && Address[0] == FAMILY_CODE)
-            {
-                //now write command and ROM at once
-                byte[] cmdAndData = new byte[9] {
-                   MATCH_ROM, //Address specific device command
-                   Address[0],Address[1],Address[2],Address[3],Address[4],Address[5],Address[6],Address[7] //do not convert to a for..loop
-               };
-                _oneWire.TouchReset();
-                foreach (var b in cmdAndData) _oneWire.WriteByte(b);
+            SelectDevice();
 
-                // Now read power supply external | parasite
-                var verify = _oneWire.WriteByte(READ_POWER_SUPPLY);
+            // Now read power supply external | parasite
+            var verify = _oneWire.WriteByte(READ_POWER_SUPPLY);
 
-
-                if (_oneWire.ReadByte() == 0x00) { return true; } else { return false; }
-
-
-            }
-            return false;
+            if (_oneWire.ReadByte() == 0x00) { return true; } else { return false; }
 
         }
-        #endregion
+    #endregion
 
-        #region Change tracking
-        /// <summary>
-        /// This sensor suports change tracking
-        /// </summary>
-        /// <returns>bool</returns>
-        public override bool CanTrackChanges()
-        {
-            return true;
-        }
-
-        /// <summary>
-        /// Let the world know whether the sensor value has changed or not
-        /// </summary>
-        /// <returns>bool</returns>
-        public override bool HasSensorValueChanged()
-        {
-            float previousTemperature = TemperatureInCelcius;
-
-            PrepareToRead();
-            Read();
-
-            float currentTemperature = TemperatureInCelcius;
-
-            bool valuesChanged = (previousTemperature != currentTemperature);
-
-            return valuesChanged;
-        }
-        #endregion
+    #region Change tracking
+    /// <summary>
+    /// This sensor suports change tracking
+    /// </summary>
+    /// <returns>bool</returns>
+    public override bool CanTrackChanges()
+    {
+        return true;
     }
+
+    /// <summary>
+    /// Let the world know whether the sensor value has changed or not
+    /// </summary>
+    /// <returns>bool</returns>
+    public override bool HasSensorValueChanged()
+    {
+        float previousTemperature = TemperatureInCelcius;
+
+        PrepareToRead();
+        Read();
+
+        float currentTemperature = TemperatureInCelcius;
+
+        bool valuesChanged = (previousTemperature != currentTemperature);
+
+        return valuesChanged;
+    }
+    #endregion
+}
 }
