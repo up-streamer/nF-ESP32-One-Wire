@@ -28,14 +28,17 @@ namespace OneWire_v3
             {
                 Console.WriteLine("");
                 Console.WriteLine("Devices found = " + ds18b20.Found);
+                Console.WriteLine("");
+
                 for (int i = 0; i < ds18b20.Found; i++)
                 {
                     ds18b20.Address = ds18b20.AddressNet[i];
-                    setAlarmSetPoints(); // Set same setpoint for selected device
 
                     foreach (var addrByte in ds18b20.AddressNet[i]) devAddrStr += addrByte.ToString("X2");
                     Console.WriteLine("18b20-" + i.ToString("X2") + " " + devAddrStr);
                     devAddrStr = "";
+                    CheckPowerMode();
+                    setAlarmSetPoints(); // Set same setpoint for selected device
                 }
                 Console.WriteLine("");
                 loopReadAll();
@@ -75,14 +78,15 @@ namespace OneWire_v3
             // Set alarm setpoint for selected device
             void setAlarmSetPoints()
             {
-                ds18b20.ConfigurationRead(false);
-                Console.WriteLine("Alarm Setpoints before RecallE2:");
-                Console.WriteLine("Hi alarm = " + ds18b20.TempHiAlarm + " C");
-                Console.WriteLine("Lo alarm = " + ds18b20.TempLoAlarm + " C");
+                //ds18b20.ConfigurationRead(false);
+                //Console.WriteLine("Alarm Setpoints before:");
+                //Console.WriteLine("Hi alarm = " + ds18b20.TempHiAlarm + " C");
+                //Console.WriteLine("Lo alarm = " + ds18b20.TempLoAlarm + " C");
+                //Console.WriteLine("");
 
                 ds18b20.TempHiAlarm = 30;
                 ds18b20.TempLoAlarm = 25;
-                ds18b20.ConfigurationWrite(true); //Write configuration on ScratchPad,
+                ds18b20.ConfigurationWrite(false); //Write configuration on ScratchPad,
                                                    //If true, save it on EEPROM too.
                 ds18b20.ConfigurationRead(true);
                 Console.WriteLine("Alarm Setpoints-RecallE2:");
@@ -106,16 +110,18 @@ namespace OneWire_v3
                         {
                             //Select the device
                             ds18b20.Address = ds18b20.AddressNet[index];
+                            //Read Temperature on selected device
+                            ds18b20.Read();
+
+                            devAddrStr = "";
+                            foreach (var addrByte in ds18b20.AddressNet[index]) devAddrStr += addrByte.ToString("X2");
+                            Console.WriteLine("DS18B20[" + devAddrStr + "] Sensor reading in One-Shot-mode; T = " + ds18b20.TemperatureInCelcius.ToString("f2") + " C");
+
                             ds18b20.ConfigurationRead(false); //Read alarm setpoint.
                             Console.WriteLine("Alarm Setpoints:");
                             Console.WriteLine("Hi alarm = " + ds18b20.TempHiAlarm + " C");
                             Console.WriteLine("Lo alarm = " + ds18b20.TempLoAlarm + " C");
-
-                            devAddrStr = "";
-                            foreach (var addrByte in ds18b20.AddressNet[index]) devAddrStr += addrByte.ToString("X2");
-                            //Read Temperature on selected device
-                            ds18b20.Read();
-                            Console.WriteLine("DS18B20[" + devAddrStr + "] Sensor reading in One-Shot-mode; T = " + ds18b20.TemperatureInCelcius.ToString("f2") + " C");
+                            Console.WriteLine("");
                         }
                     }
                     else
@@ -135,6 +141,18 @@ namespace OneWire_v3
                 Console.WriteLine("No devices found.");
                 Console.WriteLine("*****************");
             };
+
+            void CheckPowerMode()
+            {
+                if (ds18b20.IsParasitePowered())
+                {
+                    Console.WriteLine("Parasite powered");
+                }
+                else
+                {
+                    Console.WriteLine("External powered");
+                }
+            }
 
             #region Other Examples
             //OneWireController oneWire = new OneWireController();
