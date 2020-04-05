@@ -280,7 +280,6 @@ namespace nanoFramework.Companion.Drivers.Sensors
                         } while (_oneWire.FindNextDevice(true, searchMode));//keep searching until we get one
                     }
                 }
-
             }
             if (Found > 0) { return true; };
             return false;
@@ -322,7 +321,6 @@ namespace nanoFramework.Companion.Drivers.Sensors
                     break;
             }
             Thread.Sleep(waitConversion); //Wait for conversion (in default 12-bit resolution mode, 1000ms) 
-
         }
 
         /// <summary>
@@ -415,13 +413,12 @@ namespace nanoFramework.Companion.Drivers.Sensors
                 SelectDevice();
                 verify = _oneWire.WriteByte(RECALL_E2);
                 while (_oneWire.ReadByte() == 0) { Thread.Sleep(10); }
-                Console.WriteLine("verify RECALL_E2 = " + verify.ToString());
             }
 
             // Now read the scratchpad
             SelectDevice();
             verify = _oneWire.WriteByte(READ_SCRATCHPAD);
-            Console.WriteLine("verify READ_SCRATCHPAD = " + verify.ToString());
+
             // Discard temperature bytes
             _oneWire.ReadByte();
             _oneWire.ReadByte();
@@ -461,7 +458,6 @@ namespace nanoFramework.Companion.Drivers.Sensors
             _oneWire.WriteByte((byte)tempLoAlarm);
             _oneWire.WriteByte((byte)(resolution << 5));
 
-            //_oneWire.TouchReset();
             // Save confuguration on device's EEPROM
             if (save)
             {
@@ -469,8 +465,6 @@ namespace nanoFramework.Companion.Drivers.Sensors
                 verify = _oneWire.WriteByte(COPY_SCRATCHPAD);
                 Thread.Sleep(10);
             };
-
-
             return true;
         }
 
@@ -482,37 +476,36 @@ namespace nanoFramework.Companion.Drivers.Sensors
             var verify = _oneWire.WriteByte(READ_POWER_SUPPLY);
 
             if (_oneWire.ReadByte() == 0x00) { return true; } else { return false; }
-
         }
-    #endregion
+        #endregion
 
-    #region Change tracking
-    /// <summary>
-    /// This sensor suports change tracking
-    /// </summary>
-    /// <returns>bool</returns>
-    public override bool CanTrackChanges()
-    {
-        return true;
+        #region Change tracking
+        /// <summary>
+        /// This sensor suports change tracking
+        /// </summary>
+        /// <returns>bool</returns>
+        public override bool CanTrackChanges()
+        {
+            return true;
+        }
+
+        /// <summary>
+        /// Let the world know whether the sensor value has changed or not
+        /// </summary>
+        /// <returns>bool</returns>
+        public override bool HasSensorValueChanged()
+        {
+            float previousTemperature = TemperatureInCelcius;
+
+            PrepareToRead();
+            Read();
+
+            float currentTemperature = TemperatureInCelcius;
+
+            bool valuesChanged = (previousTemperature != currentTemperature);
+
+            return valuesChanged;
+        }
+        #endregion
     }
-
-    /// <summary>
-    /// Let the world know whether the sensor value has changed or not
-    /// </summary>
-    /// <returns>bool</returns>
-    public override bool HasSensorValueChanged()
-    {
-        float previousTemperature = TemperatureInCelcius;
-
-        PrepareToRead();
-        Read();
-
-        float currentTemperature = TemperatureInCelcius;
-
-        bool valuesChanged = (previousTemperature != currentTemperature);
-
-        return valuesChanged;
-    }
-    #endregion
-}
 }
