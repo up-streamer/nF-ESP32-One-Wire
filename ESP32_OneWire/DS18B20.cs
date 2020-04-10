@@ -386,7 +386,7 @@ namespace nanoFramework.Companion.Drivers.Sensors
         /// under alarm condition.
         /// </summary>
         /// <returns>bool</returns>
-        public override bool SearchForAlarmCondition()
+        public bool SearchForAlarmCondition()
         {
             Address = null;
 
