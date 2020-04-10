@@ -17,7 +17,10 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  * Added ability to work with more than one device on 1-Wire bus.
  * Modify conversion Calculation
  * Added resolution modification
- * Added ability to read/write alarm set point. Ongoing. Needs the searching solution when triggering setpoint.
+ * Added ability to read/write alarm set point.
+ * Added ability to work on network (multidrop mode)
+ * Added searching solution when triggering alarm setpoint.
+ * Now possible to check 18B20 power mode.
  * 
  *By Ricardo Santos -  @ Discord nanoframework UpStream#2439 https://github.com/up-streamer
  */
